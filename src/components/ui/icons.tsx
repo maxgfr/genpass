@@ -161,10 +161,21 @@ export function QrIcon(props: IconProps) {
 export function KeyIcon(props: IconProps) {
   return (
     <Svg {...props}>
-      <circle cx="8" cy="14" r="4" />
-      <path d="m10.8 11.2 8.2-8.2" />
-      <path d="M15 4l3 3" />
-      <path d="M18 7l2 2" />
+      <circle cx="7.5" cy="16.5" r="4.5" />
+      <path d="M10.8 13.2 21 3" />
+      <path d="m14.8 6.2 3 3" />
+      <path d="M18 3l3 3" />
     </Svg>
+  )
+}
+
+/** The brand mark: filled keyhole, same motif as the favicon. */
+export function KeyholeIcon({ size = 18 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <rect x="2" y="2" width="20" height="20" rx="5" opacity="0.14" />
+      <circle cx="12" cy="9.6" r="3.4" />
+      <path d="M10.7 12.3 9.4 18.6h5.2l-1.3-6.3z" />
+    </svg>
   )
 }

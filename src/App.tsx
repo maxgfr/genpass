@@ -8,7 +8,7 @@ import { ShareOpenDialog } from './components/share/ShareOpenDialog'
 import { ShareView } from './components/share/ShareView'
 import { SaveEntryDialog } from './components/vault/SaveEntryDialog'
 import { VaultView } from './components/vault/VaultView'
-import { Button } from './components/ui/Button'
+import { IconButton } from './components/ui/Button'
 import { LockIcon } from './components/ui/icons'
 import { parseShareFragment, type ParsedShare } from './lib/share'
 import { SettingsProvider, useSettings } from './state/SettingsProvider'
@@ -71,10 +71,9 @@ function Shell() {
         }}
         headerAction={
           vault.state.status === 'unlocked' ? (
-            <Button small onClick={vault.lock}>
-              <LockIcon size={14} />
-              Lock vault
-            </Button>
+            <IconButton label="Lock vault" onClick={vault.lock}>
+              <LockIcon />
+            </IconButton>
           ) : undefined
         }
       >

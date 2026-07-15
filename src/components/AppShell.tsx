@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { KeyIcon } from './ui/icons'
+import { KeyholeIcon } from './ui/icons'
 
 export type AppTab = 'generator' | 'vault' | 'share' | 'settings'
 
@@ -23,7 +23,7 @@ export function AppShell({ tab, onTabChange, headerAction, children }: AppShellP
       <header className="app__header">
         <div>
           <h1 className="app__wordmark">
-            <KeyIcon size={20} />
+            <KeyholeIcon size={22} />
             genpass
           </h1>
           <p className="app__tagline">Passwords generated and stored on your device only.</p>
