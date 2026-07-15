@@ -17,6 +17,7 @@ export type VaultAction =
   | { type: 'UNLOCKED'; entries: VaultEntry[] }
   | { type: 'LOCK' }
   | { type: 'SAVED'; file: EncryptedVaultFile; entries: VaultEntry[] }
+  | { type: 'REPLACED'; file: EncryptedVaultFile; entries: VaultEntry[] }
 
 function invalid(state: VaultState, action: VaultAction): never {
   throw new Error(`Invalid vault transition: ${action.type} while ${state.status}`)
@@ -38,6 +39,10 @@ export function vaultReducer(state: VaultState, action: VaultAction): VaultState
       return { status: 'locked', file: state.file }
     case 'SAVED':
       if (state.status !== 'unlocked') invalid(state, action)
+      return { status: 'unlocked', file: action.file, entries: action.entries }
+    case 'REPLACED':
+      // Import installs a decrypted vault wholesale from any settled state.
+      if (state.status === 'loading') invalid(state, action)
       return { status: 'unlocked', file: action.file, entries: action.entries }
   }
 }

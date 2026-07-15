@@ -55,6 +55,19 @@ describe('vaultReducer transitions', () => {
     expect(state).toEqual({ status: 'unlocked', file: newFile, entries: [entry] })
   })
 
+  it('REPLACED installs an imported vault from any settled state', () => {
+    const newFile = { ...file, salt: toBase64(new Uint8Array(16).fill(9)) }
+    for (const from of [
+      { status: 'uninitialized' } as VaultState,
+      { status: 'locked', file } as VaultState,
+      { status: 'unlocked', file, entries: [entry] } as VaultState,
+    ]) {
+      const state = vaultReducer(from, { type: 'REPLACED', file: newFile, entries: [entry] })
+      expect(state).toEqual({ status: 'unlocked', file: newFile, entries: [entry] })
+    }
+    expect(() => vaultReducer({ status: 'loading' }, { type: 'REPLACED', file: newFile, entries: [] })).toThrow()
+  })
+
   it('throws on invalid transitions — fail loud, not silent', () => {
     expect(() => vaultReducer({ status: 'locked', file }, { type: 'SAVED', file, entries: [] })).toThrow()
     expect(() => vaultReducer({ status: 'uninitialized' }, { type: 'UNLOCKED', entries: [] })).toThrow()
