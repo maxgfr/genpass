@@ -19,6 +19,34 @@ export function memoryStorage(): Storage {
 }
 
 /**
+ * Controllable matchMedia mock for theme tests (jsdom lacks matchMedia).
+ * Install before rendering; drive OS-level changes with setDark().
+ */
+export function installMatchMediaMock(initialDark = false): { setDark: (dark: boolean) => void } {
+  let dark = initialDark
+  const listeners = new Set<(e: { matches: boolean }) => void>()
+  const mql = {
+    get matches() {
+      return dark
+    },
+    media: '(prefers-color-scheme: dark)',
+    onchange: null,
+    addEventListener: (_type: string, cb: (e: { matches: boolean }) => void) => listeners.add(cb),
+    removeEventListener: (_type: string, cb: (e: { matches: boolean }) => void) => listeners.delete(cb),
+    addListener: (cb: (e: { matches: boolean }) => void) => listeners.add(cb),
+    removeListener: (cb: (e: { matches: boolean }) => void) => listeners.delete(cb),
+    dispatchEvent: () => false,
+  }
+  window.matchMedia = (() => mql) as unknown as typeof window.matchMedia
+  return {
+    setDark(next: boolean) {
+      dark = next
+      for (const cb of listeners) cb({ matches: dark })
+    },
+  }
+}
+
+/**
  * Stub crypto.getRandomValues with a scripted sequence of uint32 values,
  * for deterministic rejection-sampling and shuffle tests.
  * Returns a restore function.
