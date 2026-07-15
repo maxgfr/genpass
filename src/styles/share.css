@@ -1,0 +1,61 @@
+.share__qr-card {
+  /* QR codes need hard contrast — always white, independent of theme. */
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+  width: fit-content;
+  max-width: 100%;
+}
+
+.share__qr-card svg {
+  display: block;
+  width: min(280px, 70vw);
+  height: auto;
+}
+
+.share__link-row {
+  display: flex;
+  gap: var(--space-2);
+  align-items: stretch;
+}
+
+.share__link-row input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+}
+
+.share__secret {
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  overflow-wrap: anywhere;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+}
+
+.share__downloads {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.field textarea {
+  width: 100%;
+  min-height: 5.5rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  background: var(--bg);
+  color: var(--ink);
+  font-size: var(--text-sm);
+  font-family: inherit;
+  resize: vertical;
+}

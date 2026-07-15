@@ -9,7 +9,11 @@ import { EntryRow } from './EntryRow'
 import { UnlockForm } from './UnlockForm'
 import { VaultToolbarExtras } from './ExportImport'
 
-export function VaultView() {
+interface VaultViewProps {
+  onShare?: (password: string) => void
+}
+
+export function VaultView({ onShare }: VaultViewProps = {}) {
   const vault = useVault()
 
   if (vault.corrupt) {
@@ -62,7 +66,7 @@ export function VaultView() {
           ) : (
             <ul className="vault__list">
               {entries.map((entry) => (
-                <EntryRow key={entry.id} entry={entry} />
+                <EntryRow key={entry.id} entry={entry} onShare={onShare} />
               ))}
             </ul>
           )}

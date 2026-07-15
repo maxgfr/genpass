@@ -12,7 +12,7 @@ import { useToasts } from '../../state/useToasts'
 import { Button, IconButton } from '../ui/Button'
 import { InlineWarning } from '../ui/InlineWarning'
 import { Segmented } from '../ui/Segmented'
-import { CheckIcon, CopyIcon, RefreshIcon, SaveIcon } from '../ui/icons'
+import { CheckIcon, CopyIcon, RefreshIcon, SaveIcon, ShareIcon } from '../ui/icons'
 import { CharacterOptions, CLASS_LABELS, type CharacterOptionsValue } from './CharacterOptions'
 import { PassphraseOptions } from './PassphraseOptions'
 import { StrengthMeter } from './StrengthMeter'
@@ -20,9 +20,11 @@ import { StrengthMeter } from './StrengthMeter'
 interface GeneratorViewProps {
   /** Wired by the app to open the save-to-vault dialog. */
   onSave?: (password: string) => void
+  /** Wired by the app to open the Share & QR tab with this password. */
+  onShare?: (password: string) => void
 }
 
-export function GeneratorView({ onSave }: GeneratorViewProps) {
+export function GeneratorView({ onSave, onShare }: GeneratorViewProps) {
   const { settings } = useSettings()
   const { toast } = useToasts()
 
@@ -148,6 +150,11 @@ export function GeneratorView({ onSave }: GeneratorViewProps) {
                   {onSave && (
                     <IconButton label="Save to vault" onClick={() => onSave(password)}>
                       <SaveIcon />
+                    </IconButton>
+                  )}
+                  {onShare && (
+                    <IconButton label="Share or show QR" onClick={() => onShare(password)}>
+                      <ShareIcon />
                     </IconButton>
                   )}
                 </span>

@@ -136,6 +136,28 @@ export function UploadIcon(props: IconProps) {
   )
 }
 
+export function ShareIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <circle cx="18" cy="5" r="3" />
+      <circle cx="6" cy="12" r="3" />
+      <circle cx="18" cy="19" r="3" />
+      <path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4" />
+    </Svg>
+  )
+}
+
+export function QrIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <rect x="3" y="3" width="7" height="7" rx="1" />
+      <rect x="14" y="3" width="7" height="7" rx="1" />
+      <rect x="3" y="14" width="7" height="7" rx="1" />
+      <path d="M14 14h3v3h-3zM20 14h1M14 20h1M18 18h3v3h-3z" />
+    </Svg>
+  )
+}
+
 export function KeyIcon(props: IconProps) {
   return (
     <Svg {...props}>

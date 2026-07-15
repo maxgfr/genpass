@@ -6,11 +6,16 @@ import { useToasts } from '../../state/useToasts'
 import { useVault } from '../../state/VaultProvider'
 import { Button, IconButton } from '../ui/Button'
 import { Dialog } from '../ui/Dialog'
-import { CheckIcon, CopyIcon, EyeIcon, EyeOffIcon, TrashIcon } from '../ui/icons'
+import { CheckIcon, CopyIcon, EyeIcon, EyeOffIcon, ShareIcon, TrashIcon } from '../ui/icons'
 
 const REVEAL_HIDE_MS = 10_000
 
-export function EntryRow({ entry }: { entry: VaultEntry }) {
+interface EntryRowProps {
+  entry: VaultEntry
+  onShare?: (password: string) => void
+}
+
+export function EntryRow({ entry, onShare }: EntryRowProps) {
   const { deleteEntry } = useVault()
   const { settings } = useSettings()
   const { toast } = useToasts()
@@ -61,6 +66,11 @@ export function EntryRow({ entry }: { entry: VaultEntry }) {
         <IconButton label={copied ? 'Copied' : 'Copy password'} onClick={copy}>
           {copied ? <CheckIcon /> : <CopyIcon />}
         </IconButton>
+        {onShare && (
+          <IconButton label={`Share ${entry.label}`} onClick={() => onShare(entry.password)}>
+            <ShareIcon />
+          </IconButton>
+        )}
         <IconButton label={`Delete ${entry.label}`} onClick={() => setConfirmingDelete(true)}>
           <TrashIcon />
         </IconButton>

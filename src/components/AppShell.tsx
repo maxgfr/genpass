@@ -1,22 +1,23 @@
-import { useState, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { KeyIcon } from './ui/icons'
 
-export type AppTab = 'generator' | 'vault' | 'settings'
+export type AppTab = 'generator' | 'vault' | 'share' | 'settings'
 
 const TABS: { id: AppTab; label: string }[] = [
   { id: 'generator', label: 'Generator' },
   { id: 'vault', label: 'Vault' },
+  { id: 'share', label: 'Share & QR' },
   { id: 'settings', label: 'Settings' },
 ]
 
 interface AppShellProps {
+  tab: AppTab
+  onTabChange: (tab: AppTab) => void
   headerAction?: ReactNode
-  children: (tab: AppTab) => ReactNode
+  children: ReactNode
 }
 
-export function AppShell({ headerAction, children }: AppShellProps) {
-  const [tab, setTab] = useState<AppTab>('generator')
-
+export function AppShell({ tab, onTabChange, headerAction, children }: AppShellProps) {
   return (
     <div className="app">
       <header className="app__header">
@@ -40,12 +41,12 @@ export function AppShell({ headerAction, children }: AppShellProps) {
             aria-controls={`panel-${id}`}
             className="tabs__tab"
             tabIndex={tab === id ? 0 : -1}
-            onClick={() => setTab(id)}
+            onClick={() => onTabChange(id)}
             onKeyDown={(e) => {
               if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return
               const index = TABS.findIndex((t) => t.id === tab)
               const next = TABS[(index + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length]!
-              setTab(next.id)
+              onTabChange(next.id)
               document.getElementById(`tab-${next.id}`)?.focus()
             }}
           >
@@ -55,7 +56,7 @@ export function AppShell({ headerAction, children }: AppShellProps) {
       </nav>
 
       <main id={`panel-${tab}`} role="tabpanel" aria-labelledby={`tab-${tab}`} className="app__view">
-        {children(tab)}
+        {children}
       </main>
     </div>
   )
