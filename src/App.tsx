@@ -3,6 +3,7 @@ import './styles/ui.css'
 import './styles/app.css'
 import { AppShell } from './components/AppShell'
 import { GeneratorView } from './components/generator/GeneratorView'
+import { SettingsView } from './components/settings/SettingsView'
 import { SaveEntryDialog } from './components/vault/SaveEntryDialog'
 import { VaultView } from './components/vault/VaultView'
 import { Button } from './components/ui/Button'
@@ -43,7 +44,7 @@ function Shell() {
         {(tab) => {
           if (tab === 'generator') return <GeneratorView onSave={setSaveTarget} />
           if (tab === 'vault') return <VaultView />
-          return <p>Settings — coming in Phase 7.</p>
+          return <SettingsView />
         }}
       </AppShell>
       <SaveEntryDialog password={saveTarget} onClose={() => setSaveTarget(null)} />
