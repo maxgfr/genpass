@@ -4,9 +4,54 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Offline password generator and encrypted vault. Everything stays on your device." />
+    <meta
+      name="description"
+      content="Free, open-source password generator and encrypted vault that works 100% offline. Strong passwords, passphrases, QR codes and encrypted secret sharing — nothing ever leaves your device."
+    />
     <meta name="color-scheme" content="light dark" />
-    <title>genpass — password generator &amp; vault</title>
+    <link rel="canonical" href="https://maxgfr.github.io/genpass/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="genpass" />
+    <meta property="og:title" content="genpass — offline password generator & encrypted vault" />
+    <meta
+      property="og:description"
+      content="Generate strong passwords and passphrases, store them encrypted, share secrets via encrypted links and QR codes. 100% offline, open source, no server, no tracking."
+    />
+    <meta property="og:url" content="https://maxgfr.github.io/genpass/" />
+    <meta property="og:image" content="https://maxgfr.github.io/genpass/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="genpass — offline password generator & encrypted vault" />
+    <meta
+      name="twitter:description"
+      content="Strong passwords, encrypted vault, secret sharing and QR codes — 100% offline and open source. Nothing ever leaves your device."
+    />
+    <meta name="twitter:image" content="https://maxgfr.github.io/genpass/og.png" />
+
+    <!-- Structured data: not executable JavaScript, read by crawlers from the raw HTML -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "genpass",
+        "url": "https://maxgfr.github.io/genpass/",
+        "description": "Free, open-source password generator and encrypted vault that works 100% offline. Strong passwords, passphrases, QR codes and encrypted secret sharing — nothing ever leaves your device.",
+        "applicationCategory": "SecurityApplication",
+        "operatingSystem": "Any (web browser)",
+        "browserRequirements": "Requires a modern browser with Web Crypto support",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Person", "name": "maxgfr", "url": "https://github.com/maxgfr" },
+        "license": "https://github.com/maxgfr/genpass/blob/main/LICENSE",
+        "sameAs": ["https://github.com/maxgfr/genpass"]
+      }
+    </script>
+
+    <title>genpass — offline password generator &amp; encrypted vault</title>
   </head>
   <body>
     <div id="root"></div>
