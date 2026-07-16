@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { qrMatrix, qrSvgPath } from './qr'
+import { QR_MAX_BYTES, canEncodeQr, qrMatrix, qrSvgPath } from './qr'
 
 describe('qrMatrix', () => {
   it('encodes short text into a version-1 (21×21) matrix', () => {
@@ -37,6 +37,20 @@ describe('qrMatrix', () => {
     const short = qrMatrix('a')
     const long = qrMatrix('https://maxgfr.github.io/genpass/#s='.padEnd(300, 'x'))
     expect(long.size).toBeGreaterThan(short.size)
+  })
+})
+
+describe('capacity guard', () => {
+  it('accepts payloads up to the byte-mode limit and rejects beyond', () => {
+    expect(canEncodeQr('a'.repeat(100))).toBe(true)
+    expect(canEncodeQr('a'.repeat(QR_MAX_BYTES))).toBe(true)
+    expect(canEncodeQr('a'.repeat(QR_MAX_BYTES + 1))).toBe(false)
+    // Multi-byte characters count in BYTES, not code points.
+    expect(canEncodeQr('é'.repeat(QR_MAX_BYTES))).toBe(false)
+  })
+
+  it('qrMatrix still throws past the limit (guard is the UI seam)', () => {
+    expect(() => qrMatrix('a'.repeat(QR_MAX_BYTES + 100))).toThrow()
   })
 })
 

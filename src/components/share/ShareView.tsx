@@ -1,6 +1,7 @@
 import { useId, useState, type FormEvent } from 'react'
 import '../../styles/share.css'
 import { copyText } from '../../lib/clipboard'
+import { canEncodeQr } from '../../lib/qr'
 import { buildShareUrl, createShareFragment } from '../../lib/share'
 import { useToasts } from '../../state/useToasts'
 import { Button } from '../ui/Button'
@@ -87,7 +88,13 @@ export function ShareView({ prefill }: ShareViewProps) {
           />
         </div>
 
-        {mode === 'qr' && text && (
+        {mode === 'qr' && text && !canEncodeQr(text) && (
+          <InlineWarning>
+            This text is too long for a QR code (about 2,300 bytes maximum). Shorten it, or use an
+            encrypted link instead.
+          </InlineWarning>
+        )}
+        {mode === 'qr' && text && canEncodeQr(text) && (
           <>
             <QrCode text={text} label={`QR code for the entered text`} />
             <div className="share__downloads">
@@ -141,7 +148,13 @@ export function ShareView({ prefill }: ShareViewProps) {
               <input readOnly value={link} aria-label="Share link" onFocus={(e) => e.target.select()} />
               <Button onClick={copyLink}>Copy link</Button>
             </div>
-            <QrCode text={link} label="QR code for the share link" />
+            {canEncodeQr(link) ? (
+              <QrCode text={link} label="QR code for the share link" />
+            ) : (
+              <p className="vault__locked-hint">
+                This link is too long for a QR code — copy it instead.
+              </p>
+            )}
             <InlineWarning>
               The encrypted secret lives inside this link — there is no server, no expiry, and no
               one-time view. Anyone with the link{passphrase ? ' and the passphrase' : ''} can read

@@ -8,6 +8,14 @@ export interface QrMatrix {
   isDark(x: number, y: number): boolean
 }
 
+/** Byte-mode capacity of a version-40 QR code at error-correction level M. */
+export const QR_MAX_BYTES = 2331
+
+/** UI seam: check before calling qrMatrix — beyond capacity, encoding throws. */
+export function canEncodeQr(text: string): boolean {
+  return new TextEncoder().encode(text).length <= QR_MAX_BYTES
+}
+
 export function qrMatrix(text: string): QrMatrix {
   const qr = QRCode.create(text, { errorCorrectionLevel: 'M' })
   const { size, data } = qr.modules

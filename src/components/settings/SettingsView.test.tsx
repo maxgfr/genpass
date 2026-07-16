@@ -39,6 +39,16 @@ describe('SettingsView', () => {
     })
   })
 
+  it('persists default mode and batch size', async () => {
+    const user = userEvent.setup()
+    renderSettings()
+    await user.click(screen.getByRole('radio', { name: /passphrase/i }))
+    await user.click(screen.getByRole('radio', { name: /×10/i }))
+    expect(JSON.parse(localStorage.getItem(SETTINGS_STORAGE_KEY)!)).toMatchObject({
+      generator: { mode: 'passphrase', batchSize: 10 },
+    })
+  })
+
   it('generator defaults persist and seed the next GeneratorView mount', async () => {
     const user = userEvent.setup()
     const { unmount } = renderSettings()

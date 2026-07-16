@@ -1,0 +1,1015 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1784182658640" clover="3.2.0">
+  <project timestamp="1784182658640" name="All files">
+    <metrics statements="829" coveredstatements="753" conditionals="485" coveredconditionals="408" methods="291" coveredmethods="254" elements="1605" coveredelements="1415" complexity="0" loc="829" ncloc="829" packages="11" files="49" classes="49"/>
+    <package name="assets">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="eff-large-wordlist.txt" path="/Users/maxime/Downloads/genpass/src/assets/eff-large-wordlist.txt">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="components">
+      <metrics statements="9" coveredstatements="9" conditionals="8" coveredconditionals="7" methods="5" coveredmethods="5"/>
+      <file name="AppShell.tsx" path="/Users/maxime/Downloads/genpass/src/components/AppShell.tsx">
+        <metrics statements="9" coveredstatements="9" conditionals="8" coveredconditionals="7" methods="5" coveredmethods="5"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="21" count="6" type="stmt"/>
+        <line num="36" count="24" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="46" count="3" type="cond" truecount="3" falsecount="1"/>
+        <line num="47" count="4" type="stmt"/>
+        <line num="48" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="49" count="3" type="stmt"/>
+        <line num="50" count="3" type="stmt"/>
+      </file>
+    </package>
+    <package name="components.generator">
+      <metrics statements="58" coveredstatements="53" conditionals="43" coveredconditionals="36" methods="35" coveredmethods="30"/>
+      <file name="CharacterOptions.tsx" path="/Users/maxime/Downloads/genpass/src/components/generator/CharacterOptions.tsx">
+        <metrics statements="7" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="6"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="26" count="73" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="34" count="73" type="stmt"/>
+        <line num="38" count="292" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="52" count="13" type="stmt"/>
+      </file>
+      <file name="GeneratorView.tsx" path="/Users/maxime/Downloads/genpass/src/components/generator/GeneratorView.tsx">
+        <metrics statements="39" coveredstatements="36" conditionals="41" coveredconditionals="34" methods="20" coveredmethods="17"/>
+        <line num="28" count="71" type="stmt"/>
+        <line num="29" count="71" type="stmt"/>
+        <line num="31" count="71" type="stmt"/>
+        <line num="32" count="71" type="stmt"/>
+        <line num="33" count="71" type="stmt"/>
+        <line num="42" count="71" type="stmt"/>
+        <line num="43" count="71" type="stmt"/>
+        <line num="44" count="71" type="stmt"/>
+        <line num="46" count="71" type="stmt"/>
+        <line num="49" count="71" type="cond" truecount="2" falsecount="0"/>
+        <line num="53" count="71" type="stmt"/>
+        <line num="54" count="35" type="stmt"/>
+        <line num="55" count="35" type="cond" truecount="2" falsecount="0"/>
+        <line num="56" count="29" type="cond" truecount="2" falsecount="0"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="58" count="1" type="stmt"/>
+        <line num="60" count="28" type="stmt"/>
+        <line num="62" count="6" type="stmt"/>
+        <line num="63" count="6" type="stmt"/>
+        <line num="67" count="71" type="stmt"/>
+        <line num="68" count="35" type="stmt"/>
+        <line num="71" count="71" type="stmt"/>
+        <line num="73" count="1" type="stmt"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="75" count="1" type="stmt"/>
+        <line num="76" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="80" count="1" type="stmt"/>
+        <line num="81" count="1" type="stmt"/>
+        <line num="86" count="1" type="cond" truecount="0" falsecount="2"/>
+        <line num="90" count="71" type="stmt"/>
+        <line num="129" count="2" type="stmt"/>
+        <line num="139" count="67" type="stmt"/>
+        <line num="146" count="1" type="stmt"/>
+        <line num="151" count="1" type="stmt"/>
+        <line num="156" count="0" type="stmt"/>
+        <line num="171" count="16" type="stmt"/>
+        <line num="173" count="3" type="stmt"/>
+      </file>
+      <file name="PassphraseOptions.tsx" path="/Users/maxime/Downloads/genpass/src/components/generator/PassphraseOptions.tsx">
+        <metrics statements="8" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="6"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="22" count="26" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="30" count="26" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="38" count="130" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+      </file>
+      <file name="StrengthMeter.tsx" path="/Users/maxime/Downloads/genpass/src/components/generator/StrengthMeter.tsx">
+        <metrics statements="4" coveredstatements="4" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="5" count="58" type="stmt"/>
+        <line num="6" count="58" type="stmt"/>
+        <line num="7" count="58" type="stmt"/>
+        <line num="8" count="58" type="stmt"/>
+      </file>
+    </package>
+    <package name="components.settings">
+      <metrics statements="9" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="7"/>
+      <file name="SettingsView.tsx" path="/Users/maxime/Downloads/genpass/src/components/settings/SettingsView.tsx">
+        <metrics statements="9" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="7"/>
+        <line num="8" count="14" type="stmt"/>
+        <line num="10" count="14" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="75" count="5" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="components.share">
+      <metrics statements="87" coveredstatements="59" conditionals="69" coveredconditionals="49" methods="25" coveredmethods="14"/>
+      <file name="QrCode.tsx" path="/Users/maxime/Downloads/genpass/src/components/share/QrCode.tsx">
+        <metrics statements="23" coveredstatements="8" conditionals="5" coveredconditionals="0" methods="6" coveredmethods="3"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="12" count="33" type="stmt"/>
+        <line num="13" count="32" type="stmt"/>
+        <line num="14" count="32" type="stmt"/>
+        <line num="17" count="33" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="cond" truecount="0" falsecount="2"/>
+      </file>
+      <file name="ShareOpenDialog.tsx" path="/Users/maxime/Downloads/genpass/src/components/share/ShareOpenDialog.tsx">
+        <metrics statements="27" coveredstatements="20" conditionals="27" coveredconditionals="18" methods="6" coveredmethods="3"/>
+        <line num="18" count="19" type="stmt"/>
+        <line num="19" count="19" type="stmt"/>
+        <line num="20" count="19" type="stmt"/>
+        <line num="21" count="19" type="stmt"/>
+        <line num="22" count="19" type="stmt"/>
+        <line num="24" count="19" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="31" count="19" type="stmt"/>
+        <line num="32" count="3" type="stmt"/>
+        <line num="33" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="34" count="3" type="stmt"/>
+        <line num="35" count="3" type="stmt"/>
+        <line num="36" count="3" type="stmt"/>
+        <line num="37" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="38" count="2" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="47" count="3" type="stmt"/>
+        <line num="51" count="19" type="stmt"/>
+        <line num="52" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="58" count="19" type="stmt"/>
+        <line num="69" count="11" type="stmt"/>
+      </file>
+      <file name="ShareView.tsx" path="/Users/maxime/Downloads/genpass/src/components/share/ShareView.tsx">
+        <metrics statements="37" coveredstatements="31" conditionals="37" coveredconditionals="31" methods="13" coveredmethods="8"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="28" count="48" type="stmt"/>
+        <line num="29" count="48" type="stmt"/>
+        <line num="30" count="48" type="cond" truecount="2" falsecount="0"/>
+        <line num="31" count="48" type="cond" truecount="2" falsecount="0"/>
+        <line num="32" count="48" type="stmt"/>
+        <line num="33" count="48" type="stmt"/>
+        <line num="34" count="48" type="stmt"/>
+        <line num="35" count="48" type="stmt"/>
+        <line num="37" count="48" type="stmt"/>
+        <line num="38" count="2" type="stmt"/>
+        <line num="39" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="40" count="2" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="46" count="2" type="stmt"/>
+        <line num="48" count="2" type="stmt"/>
+        <line num="52" count="48" type="stmt"/>
+        <line num="53" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="54" count="1" type="cond" truecount="2" falsecount="2"/>
+        <line num="57" count="48" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="83" count="38" type="stmt"/>
+        <line num="84" count="38" type="stmt"/>
+        <line num="104" count="1" type="stmt"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="125" count="0" type="stmt"/>
+        <line num="126" count="0" type="stmt"/>
+        <line num="134" count="0" type="stmt"/>
+        <line num="135" count="0" type="stmt"/>
+        <line num="148" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="components.ui">
+      <metrics statements="52" coveredstatements="49" conditionals="69" coveredconditionals="62" methods="36" coveredmethods="32"/>
+      <file name="Button.tsx" path="/Users/maxime/Downloads/genpass/src/components/ui/Button.tsx">
+        <metrics statements="3" coveredstatements="3" conditionals="11" coveredconditionals="11" methods="2" coveredmethods="2"/>
+        <line num="12" count="1217" type="stmt"/>
+        <line num="20" count="1217" type="stmt"/>
+        <line num="34" count="1011" type="stmt"/>
+      </file>
+      <file name="Dialog.tsx" path="/Users/maxime/Downloads/genpass/src/components/ui/Dialog.tsx">
+        <metrics statements="9" coveredstatements="9" conditionals="14" coveredconditionals="11" methods="3" coveredmethods="3"/>
+        <line num="13" count="330" type="stmt"/>
+        <line num="15" count="330" type="stmt"/>
+        <line num="16" count="50" type="stmt"/>
+        <line num="17" count="50" type="cond" truecount="2" falsecount="0"/>
+        <line num="18" count="12" type="cond" truecount="3" falsecount="1"/>
+        <line num="19" count="12" type="cond" truecount="2" falsecount="2"/>
+        <line num="22" count="330" type="cond" truecount="2" falsecount="0"/>
+        <line num="24" count="159" type="stmt"/>
+        <line num="32" count="33" type="cond" truecount="2" falsecount="0"/>
+      </file>
+      <file name="EmptyState.tsx" path="/Users/maxime/Downloads/genpass/src/components/ui/EmptyState.tsx">
+        <metrics statements="1" coveredstatements="1" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="4" count="16" type="stmt"/>
+      </file>
+      <file name="InlineWarning.tsx" path="/Users/maxime/Downloads/genpass/src/components/ui/InlineWarning.tsx">
+        <metrics statements="1" coveredstatements="1" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="4" count="338" type="stmt"/>
+      </file>
+      <file name="Segmented.tsx" path="/Users/maxime/Downloads/genpass/src/components/ui/Segmented.tsx">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+        <line num="10" count="232" type="stmt"/>
+        <line num="13" count="478" type="stmt"/>
+        <line num="19" count="8" type="stmt"/>
+      </file>
+      <file name="Select.tsx" path="/Users/maxime/Downloads/genpass/src/components/ui/Select.tsx">
+        <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="4" methods="1" coveredmethods="1"/>
+        <line num="10" count="54" type="stmt"/>
+        <line num="11" count="54" type="stmt"/>
+        <line num="12" count="54" type="stmt"/>
+      </file>
+      <file name="Slider.tsx" path="/Users/maxime/Downloads/genpass/src/components/ui/Slider.tsx">
+        <metrics statements="3" coveredstatements="3" conditionals="2" coveredconditionals="1" methods="2" coveredmethods="2"/>
+        <line num="14" count="99" type="stmt"/>
+        <line num="15" count="99" type="stmt"/>
+        <line num="29" count="3" type="stmt"/>
+      </file>
+      <file name="TextInput.tsx" path="/Users/maxime/Downloads/genpass/src/components/ui/TextInput.tsx">
+        <metrics statements="10" coveredstatements="9" conditionals="32" coveredconditionals="29" methods="4" coveredmethods="2"/>
+        <line num="12" count="150" type="stmt"/>
+        <line num="13" count="150" type="stmt"/>
+        <line num="14" count="150" type="stmt"/>
+        <line num="15" count="150" type="stmt"/>
+        <line num="44" count="900" type="stmt"/>
+        <line num="45" count="900" type="stmt"/>
+        <line num="46" count="900" type="stmt"/>
+        <line num="47" count="900" type="stmt"/>
+        <line num="48" count="900" type="stmt"/>
+        <line num="67" count="0" type="cond" truecount="1" falsecount="1"/>
+      </file>
+      <file name="Toggle.tsx" path="/Users/maxime/Downloads/genpass/src/components/ui/Toggle.tsx">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="11" count="417" type="stmt"/>
+        <line num="18" count="7" type="stmt"/>
+      </file>
+      <file name="icons.tsx" path="/Users/maxime/Downloads/genpass/src/components/ui/icons.tsx">
+        <metrics statements="17" coveredstatements="15" conditionals="2" coveredconditionals="2" methods="17" coveredmethods="15"/>
+        <line num="9" count="1560" type="stmt"/>
+        <line num="27" count="79" type="stmt"/>
+        <line num="36" count="2" type="stmt"/>
+        <line num="44" count="71" type="stmt"/>
+        <line num="53" count="913" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="73" count="14" type="stmt"/>
+        <line num="84" count="23" type="stmt"/>
+        <line num="93" count="53" type="stmt"/>
+        <line num="102" count="0" type="stmt"/>
+        <line num="110" count="1" type="stmt"/>
+        <line num="120" count="134" type="stmt"/>
+        <line num="130" count="134" type="stmt"/>
+        <line num="140" count="1" type="stmt"/>
+        <line num="151" count="0" type="stmt"/>
+        <line num="162" count="134" type="stmt"/>
+        <line num="174" count="6" type="stmt"/>
+      </file>
+    </package>
+    <package name="components.vault">
+      <metrics statements="193" coveredstatements="165" conditionals="89" coveredconditionals="69" methods="48" coveredmethods="39"/>
+      <file name="CreateVaultForm.tsx" path="/Users/maxime/Downloads/genpass/src/components/vault/CreateVaultForm.tsx">
+        <metrics statements="27" coveredstatements="25" conditionals="6" coveredconditionals="5" methods="5" coveredmethods="5"/>
+        <line num="7" count="4" type="stmt"/>
+        <line num="14" count="287" type="stmt"/>
+        <line num="15" count="287" type="stmt"/>
+        <line num="16" count="287" type="stmt"/>
+        <line num="17" count="287" type="stmt"/>
+        <line num="18" count="287" type="stmt"/>
+        <line num="19" count="287" type="stmt"/>
+        <line num="21" count="287" type="stmt"/>
+        <line num="22" count="8" type="stmt"/>
+        <line num="23" count="8" type="cond" truecount="1" falsecount="1"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="27" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="31" count="7" type="stmt"/>
+        <line num="32" count="7" type="stmt"/>
+        <line num="33" count="7" type="stmt"/>
+        <line num="34" count="7" type="stmt"/>
+        <line num="35" count="7" type="stmt"/>
+        <line num="36" count="7" type="stmt"/>
+        <line num="37" count="7" type="stmt"/>
+        <line num="39" count="7" type="stmt"/>
+        <line num="43" count="287" type="stmt"/>
+        <line num="54" count="128" type="stmt"/>
+        <line num="61" count="128" type="stmt"/>
+        <line num="72" count="8" type="stmt"/>
+      </file>
+      <file name="EntryRow.tsx" path="/Users/maxime/Downloads/genpass/src/components/vault/EntryRow.tsx">
+        <metrics statements="29" coveredstatements="26" conditionals="20" coveredconditionals="18" methods="15" coveredmethods="13"/>
+        <line num="11" count="4" type="stmt"/>
+        <line num="19" count="14" type="stmt"/>
+        <line num="20" count="14" type="stmt"/>
+        <line num="21" count="14" type="stmt"/>
+        <line num="22" count="14" type="stmt"/>
+        <line num="23" count="14" type="stmt"/>
+        <line num="24" count="14" type="stmt"/>
+        <line num="27" count="14" type="stmt"/>
+        <line num="28" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="33" count="14" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="36" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="46" count="1" type="stmt"/>
+        <line num="50" count="14" type="stmt"/>
+        <line num="52" count="14" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+        <line num="74" count="2" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="82" count="1" type="stmt"/>
+        <line num="86" count="1" type="stmt"/>
+        <line num="87" count="1" type="stmt"/>
+      </file>
+      <file name="ExportImport.tsx" path="/Users/maxime/Downloads/genpass/src/components/vault/ExportImport.tsx">
+        <metrics statements="79" coveredstatements="59" conditionals="28" coveredconditionals="18" methods="17" coveredmethods="11"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="19" count="136" type="stmt"/>
+        <line num="20" count="136" type="stmt"/>
+        <line num="21" count="136" type="stmt"/>
+        <line num="23" count="136" type="stmt"/>
+        <line num="24" count="136" type="stmt"/>
+        <line num="25" count="136" type="stmt"/>
+        <line num="26" count="136" type="stmt"/>
+        <line num="28" count="136" type="stmt"/>
+        <line num="29" count="136" type="stmt"/>
+        <line num="30" count="136" type="stmt"/>
+        <line num="31" count="136" type="stmt"/>
+        <line num="32" count="136" type="stmt"/>
+        <line num="33" count="136" type="stmt"/>
+        <line num="35" count="136" type="cond" truecount="1" falsecount="1"/>
+        <line num="37" count="136" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="49" count="136" type="stmt"/>
+        <line num="50" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="51" count="2" type="stmt"/>
+        <line num="52" count="2" type="stmt"/>
+        <line num="53" count="2" type="stmt"/>
+        <line num="56" count="136" type="stmt"/>
+        <line num="57" count="3" type="stmt"/>
+        <line num="58" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="59" count="3" type="stmt"/>
+        <line num="60" count="3" type="stmt"/>
+        <line num="61" count="3" type="stmt"/>
+        <line num="62" count="3" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="67" count="2" type="cond" truecount="3" falsecount="1"/>
+        <line num="69" count="1" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="72" count="3" type="stmt"/>
+        <line num="76" count="136" type="stmt"/>
+        <line num="77" count="1" type="stmt"/>
+        <line num="78" count="1" type="stmt"/>
+        <line num="79" count="1" type="stmt"/>
+        <line num="80" count="1" type="stmt"/>
+        <line num="81" count="1" type="stmt"/>
+        <line num="84" count="136" type="stmt"/>
+        <line num="85" count="2" type="stmt"/>
+        <line num="86" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
+        <line num="90" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
+        <line num="94" count="2" type="stmt"/>
+        <line num="95" count="2" type="stmt"/>
+        <line num="96" count="2" type="stmt"/>
+        <line num="97" count="2" type="stmt"/>
+        <line num="98" count="1" type="stmt"/>
+        <line num="99" count="1" type="stmt"/>
+        <line num="101" count="1" type="stmt"/>
+        <line num="105" count="2" type="stmt"/>
+        <line num="109" count="136" type="stmt"/>
+        <line num="115" count="0" type="stmt"/>
+        <line num="119" count="1" type="stmt"/>
+        <line num="130" count="2" type="stmt"/>
+        <line num="131" count="2" type="stmt"/>
+        <line num="135" count="0" type="stmt"/>
+        <line num="147" count="36" type="stmt"/>
+        <line num="152" count="0" type="stmt"/>
+        <line num="165" count="31" type="stmt"/>
+        <line num="172" count="16" type="stmt"/>
+        <line num="179" count="16" type="stmt"/>
+      </file>
+      <file name="SaveEntryDialog.tsx" path="/Users/maxime/Downloads/genpass/src/components/vault/SaveEntryDialog.tsx">
+        <metrics statements="30" coveredstatements="28" conditionals="16" coveredconditionals="13" methods="6" coveredmethods="5"/>
+        <line num="17" count="25" type="stmt"/>
+        <line num="18" count="25" type="stmt"/>
+        <line num="19" count="25" type="stmt"/>
+        <line num="20" count="25" type="stmt"/>
+        <line num="21" count="25" type="stmt"/>
+        <line num="22" count="25" type="stmt"/>
+        <line num="23" count="25" type="stmt"/>
+        <line num="25" count="25" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="33" count="25" type="stmt"/>
+        <line num="34" count="2" type="stmt"/>
+        <line num="35" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="36" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="57" count="25" type="stmt"/>
+        <line num="66" count="6" type="stmt"/>
+        <line num="74" count="10" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
+      </file>
+      <file name="UnlockForm.tsx" path="/Users/maxime/Downloads/genpass/src/components/vault/UnlockForm.tsx">
+        <metrics statements="18" coveredstatements="18" conditionals="6" coveredconditionals="4" methods="3" coveredmethods="3"/>
+        <line num="13" count="53" type="stmt"/>
+        <line num="14" count="53" type="stmt"/>
+        <line num="15" count="53" type="stmt"/>
+        <line num="16" count="53" type="stmt"/>
+        <line num="18" count="53" type="stmt"/>
+        <line num="19" count="3" type="stmt"/>
+        <line num="20" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="21" count="3" type="stmt"/>
+        <line num="22" count="3" type="stmt"/>
+        <line num="23" count="3" type="stmt"/>
+        <line num="24" count="3" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+        <line num="26" count="2" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="35" count="3" type="stmt"/>
+        <line num="39" count="53" type="stmt"/>
+        <line num="48" count="47" type="stmt"/>
+      </file>
+      <file name="VaultView.tsx" path="/Users/maxime/Downloads/genpass/src/components/vault/VaultView.tsx">
+        <metrics statements="10" coveredstatements="9" conditionals="13" coveredconditionals="11" methods="2" coveredmethods="2"/>
+        <line num="17" count="51" type="stmt"/>
+        <line num="19" count="51" type="cond" truecount="1" falsecount="1"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="28" count="51" type="cond" truecount="4" falsecount="0"/>
+        <line num="30" count="13" type="stmt"/>
+        <line num="32" count="13" type="stmt"/>
+        <line num="38" count="2" type="stmt"/>
+        <line num="44" count="23" type="stmt"/>
+        <line num="45" count="23" type="stmt"/>
+        <line num="69" count="7" type="stmt"/>
+      </file>
+    </package>
+    <package name="lib">
+      <metrics statements="242" coveredstatements="240" conditionals="142" coveredconditionals="134" methods="66" coveredmethods="66"/>
+      <file name="charset.ts" path="/Users/maxime/Downloads/genpass/src/lib/charset.ts">
+        <metrics statements="19" coveredstatements="19" conditionals="6" coveredconditionals="6" methods="3" coveredmethods="3"/>
+        <line num="7" count="4" type="stmt"/>
+        <line num="14" count="4" type="stmt"/>
+        <line num="17" count="4" type="stmt"/>
+        <line num="42" count="5009" type="stmt"/>
+        <line num="46" count="4993" type="stmt"/>
+        <line num="47" count="13026" type="cond" truecount="2" falsecount="0"/>
+        <line num="49" count="4993" type="stmt"/>
+        <line num="50" count="4993" type="stmt"/>
+        <line num="51" count="4993" type="stmt"/>
+        <line num="52" count="4993" type="stmt"/>
+        <line num="54" count="4993" type="stmt"/>
+        <line num="55" count="19972" type="cond" truecount="2" falsecount="0"/>
+        <line num="56" count="19536" type="stmt"/>
+        <line num="57" count="413821" type="stmt"/>
+        <line num="58" count="19536" type="cond" truecount="2" falsecount="0"/>
+        <line num="59" count="206" type="stmt"/>
+        <line num="61" count="19330" type="stmt"/>
+        <line num="62" count="19330" type="stmt"/>
+        <line num="66" count="4993" type="stmt"/>
+      </file>
+      <file name="clipboard.ts" path="/Users/maxime/Downloads/genpass/src/lib/clipboard.ts">
+        <metrics statements="16" coveredstatements="16" conditionals="6" coveredconditionals="5" methods="5" coveredmethods="5"/>
+        <line num="5" count="8" type="stmt"/>
+        <line num="8" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="16" count="11" type="stmt"/>
+        <line num="17" count="11" type="stmt"/>
+        <line num="18" count="10" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="33" count="8" type="stmt"/>
+        <line num="34" count="8" type="stmt"/>
+        <line num="35" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="36" count="7" type="stmt"/>
+        <line num="37" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="38" count="3" type="stmt"/>
+        <line num="40" count="7" type="stmt"/>
+        <line num="42" count="8" type="stmt"/>
+      </file>
+      <file name="entropy.ts" path="/Users/maxime/Downloads/genpass/src/lib/entropy.ts">
+        <metrics statements="19" coveredstatements="19" conditionals="27" coveredconditionals="27" methods="5" coveredmethods="5"/>
+        <line num="7" count="64" type="cond" truecount="4" falsecount="0"/>
+        <line num="8" count="59" type="stmt"/>
+        <line num="16" count="16" type="cond" truecount="2" falsecount="0"/>
+        <line num="17" count="16" type="stmt"/>
+        <line num="19" count="16" type="cond" truecount="2" falsecount="0"/>
+        <line num="20" count="16" type="stmt"/>
+        <line num="26" count="66" type="cond" truecount="2" falsecount="0"/>
+        <line num="27" count="63" type="cond" truecount="2" falsecount="0"/>
+        <line num="28" count="53" type="cond" truecount="2" falsecount="0"/>
+        <line num="29" count="47" type="stmt"/>
+        <line num="34" count="60" type="stmt"/>
+        <line num="37" count="3" type="stmt"/>
+        <line num="40" count="66" type="cond" truecount="2" falsecount="0"/>
+        <line num="41" count="64" type="cond" truecount="2" falsecount="0"/>
+        <line num="42" count="63" type="cond" truecount="2" falsecount="0"/>
+        <line num="43" count="62" type="cond" truecount="2" falsecount="0"/>
+        <line num="44" count="61" type="cond" truecount="2" falsecount="0"/>
+        <line num="45" count="60" type="cond" truecount="2" falsecount="0"/>
+        <line num="46" count="51" type="stmt"/>
+      </file>
+      <file name="generator.ts" path="/Users/maxime/Downloads/genpass/src/lib/generator.ts">
+        <metrics statements="17" coveredstatements="17" conditionals="6" coveredconditionals="6" methods="6" coveredmethods="6"/>
+        <line num="13" count="3" type="stmt"/>
+        <line num="14" count="3" type="stmt"/>
+        <line num="15" count="3" type="stmt"/>
+        <line num="20" count="4955" type="stmt"/>
+        <line num="21" count="4955" type="cond" truecount="2" falsecount="0"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="24" count="4954" type="cond" truecount="2" falsecount="0"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="27" count="4953" type="cond" truecount="2" falsecount="0"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="36" count="4952" type="stmt"/>
+        <line num="37" count="19199" type="stmt"/>
+        <line num="39" count="4952" type="stmt"/>
+        <line num="40" count="33063" type="stmt"/>
+        <line num="42" count="4952" type="stmt"/>
+        <line num="47" count="48" type="stmt"/>
+        <line num="51" count="4907" type="stmt"/>
+      </file>
+      <file name="passphrase.ts" path="/Users/maxime/Downloads/genpass/src/lib/passphrase.ts">
+        <metrics statements="9" coveredstatements="9" conditionals="4" coveredconditionals="4" methods="1" coveredmethods="1"/>
+        <line num="16" count="165" type="stmt"/>
+        <line num="17" count="165" type="stmt"/>
+        <line num="18" count="674" type="stmt"/>
+        <line num="19" count="674" type="cond" truecount="2" falsecount="0"/>
+        <line num="20" count="674" type="stmt"/>
+        <line num="22" count="165" type="cond" truecount="2" falsecount="0"/>
+        <line num="23" count="101" type="stmt"/>
+        <line num="24" count="101" type="stmt"/>
+        <line num="26" count="165" type="stmt"/>
+      </file>
+      <file name="qr.ts" path="/Users/maxime/Downloads/genpass/src/lib/qr.ts">
+        <metrics statements="11" coveredstatements="11" conditionals="2" coveredconditionals="2" methods="4" coveredmethods="4"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="16" count="69" type="stmt"/>
+        <line num="20" count="41" type="stmt"/>
+        <line num="21" count="41" type="stmt"/>
+        <line num="22" count="41" type="stmt"/>
+        <line num="24" count="23809" type="stmt"/>
+        <line num="30" count="34" type="stmt"/>
+        <line num="31" count="34" type="stmt"/>
+        <line num="32" count="814" type="stmt"/>
+        <line num="33" count="22474" type="cond" truecount="2" falsecount="0"/>
+        <line num="36" count="34" type="stmt"/>
+      </file>
+      <file name="random.ts" path="/Users/maxime/Downloads/genpass/src/lib/random.ts">
+        <metrics statements="19" coveredstatements="19" conditionals="7" coveredconditionals="7" methods="4" coveredmethods="4"/>
+        <line num="5" count="13" type="stmt"/>
+        <line num="10" count="13" type="stmt"/>
+        <line num="13" count="171659" type="stmt"/>
+        <line num="14" count="171659" type="stmt"/>
+        <line num="19" count="173663" type="cond" truecount="5" falsecount="0"/>
+        <line num="20" count="4" type="stmt"/>
+        <line num="22" count="173659" type="cond" truecount="2" falsecount="0"/>
+        <line num="23" count="171657" type="stmt"/>
+        <line num="25" count="171657" type="stmt"/>
+        <line num="26" count="171659" type="stmt"/>
+        <line num="28" count="171657" type="stmt"/>
+        <line num="33" count="5554" type="stmt"/>
+        <line num="34" count="5554" type="stmt"/>
+        <line num="35" count="48519" type="stmt"/>
+        <line num="36" count="48519" type="stmt"/>
+        <line num="38" count="5554" type="stmt"/>
+        <line num="43" count="99" type="stmt"/>
+        <line num="44" count="99" type="stmt"/>
+        <line num="45" count="99" type="stmt"/>
+      </file>
+      <file name="settings.ts" path="/Users/maxime/Downloads/genpass/src/lib/settings.ts">
+        <metrics statements="25" coveredstatements="25" conditionals="26" coveredconditionals="25" methods="8" coveredmethods="8"/>
+        <line num="7" count="8" type="stmt"/>
+        <line num="37" count="8" type="stmt"/>
+        <line num="38" count="8" type="stmt"/>
+        <line num="39" count="8" type="stmt"/>
+        <line num="40" count="8" type="stmt"/>
+        <line num="42" count="8" type="stmt"/>
+        <line num="67" count="36" type="cond" truecount="2" falsecount="0"/>
+        <line num="71" count="12" type="cond" truecount="4" falsecount="0"/>
+        <line num="72" count="8" type="stmt"/>
+        <line num="76" count="42" type="cond" truecount="2" falsecount="0"/>
+        <line num="80" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="84" count="6" type="stmt"/>
+        <line num="85" count="6" type="cond" truecount="3" falsecount="1"/>
+        <line num="86" count="6" type="stmt"/>
+        <line num="87" count="6" type="cond" truecount="4" falsecount="0"/>
+        <line num="88" count="6" type="cond" truecount="4" falsecount="0"/>
+        <line num="89" count="6" type="stmt"/>
+        <line num="115" count="44" type="stmt"/>
+        <line num="119" count="38" type="stmt"/>
+        <line num="120" count="38" type="cond" truecount="2" falsecount="0"/>
+        <line num="121" count="7" type="stmt"/>
+        <line num="122" count="7" type="stmt"/>
+        <line num="124" count="1" type="stmt"/>
+        <line num="129" count="13" type="stmt"/>
+        <line num="130" count="13" type="stmt"/>
+      </file>
+      <file name="share.ts" path="/Users/maxime/Downloads/genpass/src/lib/share.ts">
+        <metrics statements="34" coveredstatements="32" conditionals="29" coveredconditionals="24" methods="8" coveredmethods="8"/>
+        <line num="15" count="2" type="stmt"/>
+        <line num="37" count="2" type="stmt"/>
+        <line num="38" count="2" type="stmt"/>
+        <line num="43" count="36" type="stmt"/>
+        <line num="47" count="29" type="stmt"/>
+        <line num="48" count="29" type="stmt"/>
+        <line num="52" count="9" type="stmt"/>
+        <line num="63" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="64" count="3" type="stmt"/>
+        <line num="65" count="3" type="stmt"/>
+        <line num="66" count="3" type="stmt"/>
+        <line num="68" count="6" type="stmt"/>
+        <line num="69" count="6" type="stmt"/>
+        <line num="70" count="6" type="stmt"/>
+        <line num="72" count="9" type="stmt"/>
+        <line num="73" count="9" type="stmt"/>
+        <line num="74" count="9" type="stmt"/>
+        <line num="85" count="11" type="stmt"/>
+        <line num="86" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="88" count="8" type="stmt"/>
+        <line num="89" count="8" type="stmt"/>
+        <line num="91" count="2" type="stmt"/>
+        <line num="93" count="6" type="cond" truecount="3" falsecount="1"/>
+        <line num="94" count="6" type="stmt"/>
+        <line num="95" count="6" type="cond" truecount="6" falsecount="1"/>
+        <line num="96" count="0" type="stmt"/>
+        <line num="98" count="6" type="cond" truecount="3" falsecount="1"/>
+        <line num="99" count="6" type="cond" truecount="4" falsecount="1"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="102" count="6" type="stmt"/>
+        <line num="108" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="111" count="3" type="stmt"/>
+        <line num="115" count="2" type="stmt"/>
+        <line num="116" count="2" type="stmt"/>
+      </file>
+      <file name="vaultCrypto.ts" path="/Users/maxime/Downloads/genpass/src/lib/vaultCrypto.ts">
+        <metrics statements="25" coveredstatements="25" conditionals="1" coveredconditionals="1" methods="9" coveredmethods="9"/>
+        <line num="7" count="8" type="stmt"/>
+        <line num="8" count="8" type="stmt"/>
+        <line num="9" count="8" type="stmt"/>
+        <line num="15" count="14" type="stmt"/>
+        <line num="16" count="14" type="stmt"/>
+        <line num="21" count="35" type="stmt"/>
+        <line num="25" count="56" type="stmt"/>
+        <line num="33" count="58" type="stmt"/>
+        <line num="40" count="58" type="stmt"/>
+        <line num="55" count="55" type="stmt"/>
+        <line num="56" count="55" type="stmt"/>
+        <line num="57" count="55" type="stmt"/>
+        <line num="62" count="55" type="stmt"/>
+        <line num="67" count="30" type="stmt"/>
+        <line num="68" count="30" type="stmt"/>
+        <line num="74" count="14" type="stmt"/>
+        <line num="76" count="16" type="stmt"/>
+        <line num="86" count="3" type="stmt"/>
+        <line num="87" count="3" type="stmt"/>
+        <line num="88" count="3" type="stmt"/>
+        <line num="98" count="40" type="stmt"/>
+        <line num="99" count="40" type="stmt"/>
+        <line num="114" count="19" type="stmt"/>
+        <line num="115" count="19" type="stmt"/>
+        <line num="116" count="11" type="stmt"/>
+      </file>
+      <file name="vaultFormat.ts" path="/Users/maxime/Downloads/genpass/src/lib/vaultFormat.ts">
+        <metrics statements="26" coveredstatements="26" conditionals="17" coveredconditionals="17" methods="5" coveredmethods="5"/>
+        <line num="30" count="10" type="stmt"/>
+        <line num="31" count="10" type="stmt"/>
+        <line num="35" count="11" type="stmt"/>
+        <line num="38" count="153" type="stmt"/>
+        <line num="39" count="153" type="stmt"/>
+        <line num="40" count="156" type="stmt"/>
+        <line num="42" count="153" type="stmt"/>
+        <line num="46" count="89" type="stmt"/>
+        <line num="47" count="89" type="stmt"/>
+        <line num="48" count="104367" type="stmt"/>
+        <line num="49" count="87" type="stmt"/>
+        <line num="53" count="45" type="stmt"/>
+        <line num="58" count="20" type="stmt"/>
+        <line num="59" count="20" type="stmt"/>
+        <line num="61" count="2" type="stmt"/>
+        <line num="63" count="18" type="cond" truecount="4" falsecount="0"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="66" count="17" type="stmt"/>
+        <line num="67" count="17" type="cond" truecount="2" falsecount="0"/>
+        <line num="68" count="15" type="cond" truecount="2" falsecount="0"/>
+        <line num="69" count="14" type="cond" truecount="5" falsecount="0"/>
+        <line num="70" count="2" type="stmt"/>
+        <line num="72" count="12" type="stmt"/>
+        <line num="73" count="34" type="cond" truecount="4" falsecount="0"/>
+        <line num="74" count="2" type="stmt"/>
+        <line num="77" count="10" type="stmt"/>
+      </file>
+      <file name="vaultStorage.ts" path="/Users/maxime/Downloads/genpass/src/lib/vaultStorage.ts">
+        <metrics statements="11" coveredstatements="11" conditionals="7" coveredconditionals="6" methods="5" coveredmethods="5"/>
+        <line num="3" count="6" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="13" count="62" type="stmt"/>
+        <line num="22" count="28" type="stmt"/>
+        <line num="23" count="28" type="cond" truecount="2" falsecount="0"/>
+        <line num="24" count="3" type="stmt"/>
+        <line num="28" count="41" type="stmt"/>
+        <line num="29" count="41" type="stmt"/>
+        <line num="31" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="36" count="1" type="stmt"/>
+      </file>
+      <file name="wordlist.ts" path="/Users/maxime/Downloads/genpass/src/lib/wordlist.ts">
+        <metrics statements="11" coveredstatements="11" conditionals="4" coveredconditionals="4" methods="3" coveredmethods="3"/>
+        <line num="3" count="3" type="stmt"/>
+        <line num="11" count="6" type="stmt"/>
+        <line num="13" count="46658" type="stmt"/>
+        <line num="15" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="18" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="21" count="4" type="stmt"/>
+        <line num="24" count="3" type="stmt"/>
+        <line num="28" count="8" type="stmt"/>
+        <line num="29" count="8" type="stmt"/>
+      </file>
+    </package>
+    <package name="state">
+      <metrics statements="148" coveredstatements="146" conditionals="56" coveredconditionals="46" methods="49" coveredmethods="48"/>
+      <file name="SettingsProvider.tsx" path="/Users/maxime/Downloads/genpass/src/state/SettingsProvider.tsx">
+        <metrics statements="11" coveredstatements="11" conditionals="2" coveredconditionals="1" methods="5" coveredmethods="5"/>
+        <line num="9" count="7" type="stmt"/>
+        <line num="12" count="44" type="stmt"/>
+        <line num="14" count="44" type="stmt"/>
+        <line num="15" count="12" type="stmt"/>
+        <line num="16" count="12" type="stmt"/>
+        <line num="17" count="12" type="stmt"/>
+        <line num="18" count="12" type="stmt"/>
+        <line num="22" count="44" type="stmt"/>
+        <line num="26" count="104" type="stmt"/>
+        <line num="27" count="104" type="cond" truecount="1" falsecount="1"/>
+        <line num="28" count="104" type="stmt"/>
+      </file>
+      <file name="VaultProvider.tsx" path="/Users/maxime/Downloads/genpass/src/state/VaultProvider.tsx">
+        <metrics statements="68" coveredstatements="66" conditionals="15" coveredconditionals="10" methods="20" coveredmethods="19"/>
+        <line num="52" count="5" type="stmt"/>
+        <line num="61" count="95" type="stmt"/>
+        <line num="62" count="95" type="stmt"/>
+        <line num="64" count="95" type="stmt"/>
+        <line num="66" count="95" type="stmt"/>
+        <line num="68" count="95" type="stmt"/>
+        <line num="69" count="24" type="stmt"/>
+        <line num="70" count="24" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="78" count="95" type="stmt"/>
+        <line num="80" count="15" type="stmt"/>
+        <line num="81" count="15" type="stmt"/>
+        <line num="82" count="15" type="stmt"/>
+        <line num="83" count="15" type="stmt"/>
+        <line num="85" count="15" type="stmt"/>
+        <line num="86" count="15" type="stmt"/>
+        <line num="91" count="95" type="stmt"/>
+        <line num="93" count="19" type="stmt"/>
+        <line num="94" count="19" type="stmt"/>
+        <line num="95" count="19" type="stmt"/>
+        <line num="96" count="19" type="stmt"/>
+        <line num="97" count="19" type="stmt"/>
+        <line num="98" count="19" type="stmt"/>
+        <line num="103" count="95" type="stmt"/>
+        <line num="105" count="7" type="cond" truecount="1" falsecount="1"/>
+        <line num="106" count="7" type="stmt"/>
+        <line num="107" count="4" type="stmt"/>
+        <line num="108" count="4" type="stmt"/>
+        <line num="113" count="95" type="stmt"/>
+        <line num="114" count="5" type="stmt"/>
+        <line num="115" count="5" type="stmt"/>
+        <line num="118" count="95" type="stmt"/>
+        <line num="120" count="15" type="cond" truecount="3" falsecount="1"/>
+        <line num="121" count="15" type="stmt"/>
+        <line num="122" count="15" type="stmt"/>
+        <line num="123" count="15" type="stmt"/>
+        <line num="128" count="95" type="stmt"/>
+        <line num="130" count="11" type="stmt"/>
+        <line num="131" count="11" type="stmt"/>
+        <line num="132" count="11" type="stmt"/>
+        <line num="137" count="95" type="stmt"/>
+        <line num="139" count="1" type="stmt"/>
+        <line num="143" count="95" type="stmt"/>
+        <line num="144" count="3" type="stmt"/>
+        <line num="148" count="95" type="stmt"/>
+        <line num="150" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="152" count="4" type="stmt"/>
+        <line num="153" count="2" type="stmt"/>
+        <line num="154" count="2" type="stmt"/>
+        <line num="155" count="2" type="stmt"/>
+        <line num="156" count="2" type="stmt"/>
+        <line num="157" count="2" type="stmt"/>
+        <line num="158" count="2" type="stmt"/>
+        <line num="163" count="95" type="stmt"/>
+        <line num="164" count="3" type="cond" truecount="3" falsecount="1"/>
+        <line num="165" count="0" type="stmt"/>
+        <line num="168" count="95" type="stmt"/>
+        <line num="169" count="5" type="stmt"/>
+        <line num="170" count="5" type="stmt"/>
+        <line num="171" count="2" type="stmt"/>
+        <line num="172" count="2" type="stmt"/>
+        <line num="173" count="2" type="stmt"/>
+        <line num="176" count="95" type="stmt"/>
+        <line num="177" count="95" type="stmt"/>
+        <line num="193" count="95" type="stmt"/>
+        <line num="197" count="642" type="stmt"/>
+        <line num="198" count="642" type="cond" truecount="1" falsecount="1"/>
+        <line num="199" count="642" type="stmt"/>
+      </file>
+      <file name="useAutoLock.ts" path="/Users/maxime/Downloads/genpass/src/state/useAutoLock.ts">
+        <metrics statements="25" coveredstatements="25" conditionals="8" coveredconditionals="6" methods="6" coveredmethods="6"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="12" count="5" type="stmt"/>
+        <line num="13" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="15" count="4" type="stmt"/>
+        <line num="16" count="4" type="stmt"/>
+        <line num="17" count="4" type="stmt"/>
+        <line num="18" count="899" type="cond" truecount="2" falsecount="0"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="20" count="2" type="stmt"/>
+        <line num="24" count="4" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="31" count="4" type="stmt"/>
+        <line num="32" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="38" count="12" type="stmt"/>
+        <line num="39" count="4" type="stmt"/>
+        <line num="42" count="7" type="stmt"/>
+        <line num="43" count="21" type="stmt"/>
+        <line num="44" count="7" type="stmt"/>
+        <line num="47" count="4" type="stmt"/>
+      </file>
+      <file name="useTheme.ts" path="/Users/maxime/Downloads/genpass/src/state/useTheme.ts">
+        <metrics statements="11" coveredstatements="11" conditionals="4" coveredconditionals="4" methods="4" coveredmethods="4"/>
+        <line num="10" count="5" type="stmt"/>
+        <line num="11" count="5" type="stmt"/>
+        <line num="12" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="13" count="3" type="stmt"/>
+        <line num="14" count="3" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="18" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="20" count="2" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
+        <line num="22" count="2" type="stmt"/>
+      </file>
+      <file name="useToasts.tsx" path="/Users/maxime/Downloads/genpass/src/state/useToasts.tsx">
+        <metrics statements="13" coveredstatements="13" conditionals="5" coveredconditionals="4" methods="8" coveredmethods="8"/>
+        <line num="13" count="8" type="stmt"/>
+        <line num="15" count="8" type="stmt"/>
+        <line num="18" count="48" type="stmt"/>
+        <line num="19" count="48" type="stmt"/>
+        <line num="21" count="48" type="cond" truecount="1" falsecount="0"/>
+        <line num="22" count="10" type="stmt"/>
+        <line num="23" count="10" type="stmt"/>
+        <line num="24" count="10" type="stmt"/>
+        <line num="27" count="48" type="stmt"/>
+        <line num="32" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="42" count="319" type="stmt"/>
+        <line num="43" count="319" type="cond" truecount="1" falsecount="1"/>
+        <line num="44" count="319" type="stmt"/>
+      </file>
+      <file name="vaultReducer.ts" path="/Users/maxime/Downloads/genpass/src/state/vaultReducer.ts">
+        <metrics statements="20" coveredstatements="20" conditionals="22" coveredconditionals="21" methods="6" coveredmethods="6"/>
+        <line num="23" count="5" type="stmt"/>
+        <line num="27" count="85" type="cond" truecount="6" falsecount="0"/>
+        <line num="29" count="26" type="cond" truecount="1" falsecount="1"/>
+        <line num="30" count="26" type="cond" truecount="2" falsecount="0"/>
+        <line num="32" count="21" type="cond" truecount="2" falsecount="0"/>
+        <line num="33" count="20" type="stmt"/>
+        <line num="35" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="36" count="5" type="stmt"/>
+        <line num="38" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="39" count="6" type="stmt"/>
+        <line num="41" count="19" type="cond" truecount="2" falsecount="0"/>
+        <line num="42" count="18" type="stmt"/>
+        <line num="45" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="46" count="5" type="stmt"/>
+        <line num="51" count="14" type="stmt"/>
+        <line num="52" count="14" type="cond" truecount="2" falsecount="0"/>
+        <line num="53" count="2" type="stmt"/>
+        <line num="54" count="2" type="stmt"/>
+        <line num="55" count="2" type="stmt"/>
+        <line num="59" count="6" type="stmt"/>
+      </file>
+    </package>
+    <package name="styles">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="generator.css" path="/Users/maxime/Downloads/genpass/src/styles/generator.css">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="share.css" path="/Users/maxime/Downloads/genpass/src/styles/share.css">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="vault.css" path="/Users/maxime/Downloads/genpass/src/styles/vault.css">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="test">
+      <metrics statements="31" coveredstatements="24" conditionals="9" coveredconditionals="5" methods="19" coveredmethods="13"/>
+      <file name="helpers.ts" path="/Users/maxime/Downloads/genpass/src/test/helpers.ts">
+        <metrics statements="31" coveredstatements="24" conditionals="9" coveredconditionals="5" methods="19" coveredmethods="13"/>
+        <line num="4" count="13" type="stmt"/>
+        <line num="8" count="11" type="stmt"/>
+        <line num="9" count="11" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="14" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="15" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="8" type="stmt"/>
+        <line num="26" count="2" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="28" count="2" type="stmt"/>
+        <line num="30" count="4" type="stmt"/>
+        <line num="34" count="2" type="stmt"/>
+        <line num="35" count="2" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="40" count="2" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="43" count="4" type="stmt"/>
+        <line num="44" count="4" type="stmt"/>
+        <line num="55" count="3" type="stmt"/>
+        <line num="56" count="3" type="stmt"/>
+        <line num="59" count="8" type="cond" truecount="1" falsecount="1"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="62" count="8" type="stmt"/>
+        <line num="63" count="8" type="cond" truecount="1" falsecount="1"/>
+        <line num="64" count="8" type="stmt"/>
+        <line num="66" count="8" type="stmt"/>
+        <line num="68" count="3" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

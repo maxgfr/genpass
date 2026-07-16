@@ -116,6 +116,17 @@ describe('GeneratorView — passphrase mode', () => {
     for (const w of words) expect(w).toMatch(/^[A-Z][a-z-]*$/)
   })
 
+  it('separator and digit options apply', async () => {
+    const user = setupUser()
+    renderView()
+    await user.click(screen.getByRole('radio', { name: /passphrase/i }))
+    await user.selectOptions(screen.getByLabelText(/separator/i), '.')
+    await user.click(screen.getByRole('switch', { name: /add a digit/i }))
+    const phrase = passwords()[0]!
+    expect(phrase.split('.')).toHaveLength(5)
+    expect(phrase.match(/\d/g)).toHaveLength(1)
+  })
+
   it('word count follows the slider', async () => {
     const user = setupUser()
     renderView()

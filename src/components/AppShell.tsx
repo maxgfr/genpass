@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { KeyholeIcon } from './ui/icons'
+import { GithubIcon, KeyholeIcon } from './ui/icons'
 
 export type AppTab = 'generator' | 'vault' | 'share' | 'settings'
 
@@ -58,6 +58,22 @@ export function AppShell({ tab, onTabChange, headerAction, children }: AppShellP
       <main id={`panel-${tab}`} role="tabpanel" aria-labelledby={`tab-${tab}`} className="app__view">
         {children}
       </main>
+
+      <footer className="app__footer">
+        <p>
+          <strong>100% offline · Open source.</strong> No server, no tracking, no analytics —
+          everything runs and stays on your device.
+        </p>
+        <a
+          className="app__footer-link"
+          href="https://github.com/maxgfr/genpass"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <GithubIcon />
+          Verify the code on GitHub
+        </a>
+      </footer>
     </div>
   )
 }
