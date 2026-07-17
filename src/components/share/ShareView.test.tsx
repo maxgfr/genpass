@@ -3,6 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createShareFragment, openShare, parseShareFragment } from '../../lib/share'
+import { SettingsProvider } from '../../state/SettingsProvider'
 import { ToastProvider } from '../../state/useToasts'
 import { TEST_ITERATIONS } from '../../test/helpers'
 import { ShareOpenDialog } from './ShareOpenDialog'
@@ -10,14 +11,20 @@ import { ShareView } from './ShareView'
 
 beforeEach(() => localStorage.clear())
 
+function renderShare(prefill?: string | null) {
+  return render(
+    <SettingsProvider>
+      <ToastProvider>
+        <ShareView prefill={prefill} />
+      </ToastProvider>
+    </SettingsProvider>,
+  )
+}
+
 describe('ShareView — QR mode', () => {
   it('renders a QR code for typed text with download actions', async () => {
     const user = userEvent.setup()
-    render(
-      <ToastProvider>
-        <ShareView />
-      </ToastProvider>,
-    )
+    renderShare()
     await user.type(screen.getByLabelText(/^text$/i), 'https://example.com')
     expect(screen.getByRole('img', { name: /qr code/i })).toBeTruthy()
     expect(screen.getByRole('button', { name: /download svg/i })).toBeTruthy()
@@ -27,11 +34,7 @@ describe('ShareView — QR mode', () => {
 
 describe('ShareView — QR capacity guard', () => {
   it('shows a warning instead of crashing on text beyond QR capacity', async () => {
-    render(
-      <ToastProvider>
-        <ShareView prefill={null} />
-      </ToastProvider>,
-    )
+    renderShare(null)
     const textarea = screen.getByLabelText(/^text$/i)
     fireEvent.change(textarea, { target: { value: 'x'.repeat(3000) } })
     expect(screen.queryByRole('img')).toBeNull()
@@ -49,11 +52,7 @@ describe('ShareView — downloads and copy', () => {
     const user = userEvent.setup()
     Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true })
 
-    render(
-      <ToastProvider>
-        <ShareView />
-      </ToastProvider>,
-    )
+    renderShare()
     await user.type(screen.getByLabelText(/^text$/i), 'download me')
     await user.click(screen.getByRole('button', { name: /download svg/i }))
     expect(createObjectURL).toHaveBeenCalledTimes(1)
@@ -74,11 +73,7 @@ describe('ShareView — downloads and copy', () => {
 describe('ShareView — encrypted link mode', () => {
   it('creates a keyed link containing the fragment and shows its QR', async () => {
     const user = userEvent.setup()
-    render(
-      <ToastProvider>
-        <ShareView prefill="MySecret!42" />
-      </ToastProvider>,
-    )
+    renderShare("MySecret!42")
     // Prefill lands in link mode with the secret filled in.
     expect((screen.getByLabelText(/^secret$/i) as HTMLTextAreaElement).value).toBe('MySecret!42')
     await user.click(screen.getByRole('button', { name: /create encrypted link/i }))
@@ -91,11 +86,7 @@ describe('ShareView — encrypted link mode', () => {
 
   it('embeds the default 24-hour expiry in the encrypted payload', async () => {
     const user = userEvent.setup()
-    render(
-      <ToastProvider>
-        <ShareView prefill="MySecret!42" />
-      </ToastProvider>,
-    )
+    renderShare("MySecret!42")
     const select = screen.getByLabelText(/link expires/i) as HTMLSelectElement
     expect(select.value).toBe('86400000')
     const before = Date.now()
@@ -109,11 +100,7 @@ describe('ShareView — encrypted link mode', () => {
 
   it('omits exp when expiry is set to Never', async () => {
     const user = userEvent.setup()
-    render(
-      <ToastProvider>
-        <ShareView prefill="MySecret!42" />
-      </ToastProvider>,
-    )
+    renderShare("MySecret!42")
     await user.selectOptions(
       screen.getByLabelText(/link expires/i),
       screen.getByRole('option', { name: 'Never' }),
@@ -124,18 +111,24 @@ describe('ShareView — encrypted link mode', () => {
     expect(payload.exp).toBeUndefined()
   })
 
-  it('blocks a passphrase shorter than 10 characters', async () => {
+  it('generates a passphrase from the user defaults and reveals it', async () => {
     const user = userEvent.setup()
-    render(
-      <ToastProvider>
-        <ShareView prefill="MySecret!42" />
-      </ToastProvider>,
-    )
-    await user.type(screen.getByLabelText(/^passphrase/i), 'short')
+    renderShare("MySecret!42")
+    await user.click(screen.getByRole('button', { name: /generate passphrase/i }))
+    const input = screen.getByLabelText(/^passphrase/i) as HTMLInputElement
+    // Default settings: 5 capitalized words, dash-separated, no digit.
+    expect(input.value).toMatch(/^[A-Z][a-z]+(-[A-Z][a-z]+){4}$/)
+    // Revealed so the sender can read it and pass it along.
+    expect(input.type).toBe('text')
+  })
+
+  it('accepts any passphrase length (no minimum)', async () => {
+    const user = userEvent.setup()
+    renderShare("MySecret!42")
+    await user.type(screen.getByLabelText(/^passphrase/i), 'abc')
     await user.click(screen.getByRole('button', { name: /create encrypted link/i }))
-    expect(await screen.findByRole('alert')).toBeTruthy()
-    expect(screen.getByText('Use at least 10 characters.')).toBeTruthy()
-    expect(screen.queryByRole('textbox', { name: /share link/i })).toBeNull()
+    const link = (await screen.findByRole('textbox', { name: /share link/i })) as HTMLInputElement
+    expect(link.value).toContain('#s=')
   })
 })
 

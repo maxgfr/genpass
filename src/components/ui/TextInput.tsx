@@ -37,12 +37,32 @@ export function TextInput({ label, hint, error, ...rest }: TextInputProps) {
 interface PasswordInputProps extends Omit<TextInputProps, 'type'> {
   value: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  /** Controlled reveal state — pass both to drive it from outside (e.g. after
+   *  generating a value the user must be able to read). Omit for the default
+   *  internal toggle. */
+  revealed?: boolean
+  onRevealedChange?: (revealed: boolean) => void
 }
 
 /** Text input with a reveal toggle, for master-password fields. */
-export function PasswordInput({ label, hint, error, value, onChange, ...rest }: PasswordInputProps) {
+export function PasswordInput({
+  label,
+  hint,
+  error,
+  value,
+  onChange,
+  revealed: revealedProp,
+  onRevealedChange,
+  ...rest
+}: PasswordInputProps) {
   const id = useId()
-  const [revealed, setRevealed] = useState(false)
+  const [internalRevealed, setInternalRevealed] = useState(false)
+  const revealed = revealedProp ?? internalRevealed
+  const setRevealed = (updater: (r: boolean) => boolean) => {
+    const next = updater(revealed)
+    setInternalRevealed(next)
+    onRevealedChange?.(next)
+  }
   const hintId = `${id}-hint`
   const errorId = `${id}-error`
   return (

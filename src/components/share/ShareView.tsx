@@ -1,8 +1,11 @@
 import { useId, useState, type FormEvent } from 'react'
 import '../../styles/share.css'
 import { copyText } from '../../lib/clipboard'
+import { generatePassphrase } from '../../lib/passphrase'
 import { canEncodeQr } from '../../lib/qr'
 import { buildShareUrl, createShareFragment } from '../../lib/share'
+import { getWordlist } from '../../lib/wordlist'
+import { useSettings } from '../../state/SettingsProvider'
 import { useToasts } from '../../state/useToasts'
 import { Button } from '../ui/Button'
 import { InlineWarning } from '../ui/InlineWarning'
@@ -10,8 +13,6 @@ import { Segmented } from '../ui/Segmented'
 import { Select } from '../ui/Select'
 import { PasswordInput, TextInput } from '../ui/TextInput'
 import { QrCode, qrPngBlob, qrSvgDocument } from './QrCode'
-
-const MIN_PASSPHRASE_LENGTH = 10
 
 /** ms === 0 means "never": no exp field in the payload. */
 const EXPIRY_PRESETS = [
@@ -40,23 +41,27 @@ interface ShareViewProps {
 
 export function ShareView({ prefill }: ShareViewProps) {
   const { toast } = useToasts()
+  const { settings } = useSettings()
   const textareaId = useId()
   const [mode, setMode] = useState<'link' | 'qr'>(prefill ? 'link' : 'qr')
   const [text, setText] = useState(prefill ?? '')
   const [label, setLabel] = useState('')
   const [passphrase, setPassphrase] = useState('')
-  const [passError, setPassError] = useState<string | null>(null)
+  const [passRevealed, setPassRevealed] = useState(false)
   const [expiryMs, setExpiryMs] = useState(DEFAULT_EXPIRY_MS)
   const [link, setLink] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
+  const generateSharePassphrase = () => {
+    setPassphrase(generatePassphrase(settings.passphrase, getWordlist()))
+    // Reveal it: the sender has to read it to hand it to the recipient.
+    setPassRevealed(true)
+    setLink(null)
+  }
+
   const createLink = async (e: FormEvent) => {
     e.preventDefault()
     if (!text) return
-    if (passphrase && passphrase.length < MIN_PASSPHRASE_LENGTH) {
-      setPassError(`Use at least ${MIN_PASSPHRASE_LENGTH} characters.`)
-      return
-    }
     setBusy(true)
     try {
       const fragment = await createShareFragment(
@@ -156,12 +161,17 @@ export function ShareView({ prefill }: ShareViewProps) {
               value={passphrase}
               onChange={(e) => {
                 setPassphrase(e.target.value)
-                setPassError(null)
                 setLink(null)
               }}
-              hint="With a passphrase, the link alone is useless — tell the recipient the passphrase over a different channel. Use at least 10 characters; a generated 4-word passphrase is best."
-              error={passError ?? undefined}
+              hint="With a passphrase, the link alone is useless — tell the recipient the passphrase over a different channel."
+              revealed={passRevealed}
+              onRevealedChange={setPassRevealed}
             />
+            <div>
+              <Button small onClick={generateSharePassphrase}>
+                Generate passphrase
+              </Button>
+            </div>
             <Select
               label="Link expires"
               value={expiryMs}
