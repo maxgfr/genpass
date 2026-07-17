@@ -54,6 +54,10 @@ export function UnlockForm({ onUnlocked }: UnlockFormProps) {
         <UnlockIcon size={16} />
         Unlock
       </Button>
+      <p className="vault__locked-hint">
+        Forgot it? There is no recovery — but you can erase the vault from Settings and start
+        over.
+      </p>
     </form>
   )
 }

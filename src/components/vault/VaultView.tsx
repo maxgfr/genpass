@@ -23,7 +23,7 @@ export function VaultView({ onShare }: VaultViewProps = {}) {
     return (
       <InlineWarning danger>
         The stored vault data could not be read. It has not been touched — if you have an exported
-        backup, clear this site's data and import it.
+        backup, erase the vault from Settings, create a fresh one, and import the backup.
       </InlineWarning>
     )
   }

@@ -23,7 +23,7 @@ import {
   type EncryptedVaultFile,
   type VaultEntry,
 } from '../lib/vaultFormat'
-import { loadVaultFile, saveVaultFile } from '../lib/vaultStorage'
+import { clearVault, loadVaultFile, saveVaultFile } from '../lib/vaultStorage'
 import { removeEntry, upsertEntry, vaultReducer, type VaultState } from './vaultReducer'
 
 export interface NewEntry {
@@ -47,6 +47,9 @@ export interface VaultApi {
   changeMasterPassword: (current: string, next: string) => Promise<void>
   exportBlob: () => string | null
   importReplace: (json: string, password: string) => Promise<void>
+  /** Destructive reset: deletes the stored vault and every entry in it.
+   *  The only way out of a forgotten master password or a corrupt blob. */
+  eraseVault: () => void
 }
 
 const VaultContext = createContext<VaultApi | null>(null)
@@ -173,6 +176,13 @@ export function VaultProvider({ children, iterations = DEFAULT_ITERATIONS }: Vau
     dispatch({ type: 'REPLACED', file, entries: payload.entries })
   }, [])
 
+  const eraseVault = useCallback(() => {
+    clearVault()
+    keyRef.current = null
+    setCorrupt(false)
+    dispatch({ type: 'ERASED' })
+  }, [])
+
   const api = useMemo<VaultApi>(
     () => ({
       state,
@@ -186,8 +196,9 @@ export function VaultProvider({ children, iterations = DEFAULT_ITERATIONS }: Vau
       changeMasterPassword,
       exportBlob,
       importReplace,
+      eraseVault,
     }),
-    [state, corrupt, createVault, unlock, lock, addEntry, updateEntry, deleteEntry, changeMasterPassword, exportBlob, importReplace],
+    [state, corrupt, createVault, unlock, lock, addEntry, updateEntry, deleteEntry, changeMasterPassword, exportBlob, importReplace, eraseVault],
   )
 
   return <VaultContext.Provider value={api}>{children}</VaultContext.Provider>

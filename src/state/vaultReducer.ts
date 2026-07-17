@@ -18,6 +18,7 @@ export type VaultAction =
   | { type: 'LOCK' }
   | { type: 'SAVED'; file: EncryptedVaultFile; entries: VaultEntry[] }
   | { type: 'REPLACED'; file: EncryptedVaultFile; entries: VaultEntry[] }
+  | { type: 'ERASED' }
 
 function invalid(state: VaultState, action: VaultAction): never {
   throw new Error(`Invalid vault transition: ${action.type} while ${state.status}`)
@@ -44,6 +45,11 @@ export function vaultReducer(state: VaultState, action: VaultAction): VaultState
       // Import installs a decrypted vault wholesale from any settled state.
       if (state.status === 'loading') invalid(state, action)
       return { status: 'unlocked', file: action.file, entries: action.entries }
+    case 'ERASED':
+      // Destructive reset (forgotten master password, corrupted blob). Valid
+      // from ANY state — including 'loading', which is where a corrupt blob
+      // leaves the machine stuck.
+      return { status: 'uninitialized' }
   }
 }
 
