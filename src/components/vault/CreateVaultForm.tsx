@@ -1,10 +1,11 @@
 import { useState, type FormEvent } from 'react'
+import { generatePassphrase } from '../../lib/passphrase'
+import { getWordlist } from '../../lib/wordlist'
+import { useSettings } from '../../state/SettingsProvider'
 import { useVault } from '../../state/VaultProvider'
 import { Button } from '../ui/Button'
 import { InlineWarning } from '../ui/InlineWarning'
 import { PasswordInput } from '../ui/TextInput'
-
-const MIN_LENGTH = 10
 
 interface CreateVaultFormProps {
   onCreated?: () => void
@@ -12,18 +13,27 @@ interface CreateVaultFormProps {
 
 export function CreateVaultForm({ onCreated }: CreateVaultFormProps) {
   const { createVault } = useVault()
+  const { settings } = useSettings()
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
+  const [pwRevealed, setPwRevealed] = useState(false)
+  const [confirmRevealed, setConfirmRevealed] = useState(false)
   const [acknowledged, setAcknowledged] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const suggest = () => {
+    const phrase = generatePassphrase(settings.passphrase, getWordlist())
+    setPassword(phrase)
+    setConfirm(phrase)
+    // Reveal both: the user has to read the suggestion to memorize it.
+    setPwRevealed(true)
+    setConfirmRevealed(true)
+    setError(null)
+  }
+
   const submit = async (e: FormEvent) => {
     e.preventDefault()
-    if (password.length < MIN_LENGTH) {
-      setError(`Use at least ${MIN_LENGTH} characters.`)
-      return
-    }
     if (password !== confirm) {
       setError('The passwords do not match.')
       return
@@ -52,15 +62,24 @@ export function CreateVaultForm({ onCreated }: CreateVaultFormProps) {
         label="Master password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        hint={`At least ${MIN_LENGTH} characters. A long passphrase works well.`}
+        hint="A long passphrase works well — suggest one below if you prefer."
         autoComplete="new-password"
+        revealed={pwRevealed}
+        onRevealedChange={setPwRevealed}
       />
+      <div>
+        <Button small onClick={suggest}>
+          Suggest passphrase
+        </Button>
+      </div>
       <PasswordInput
         label="Confirm master password"
         value={confirm}
         onChange={(e) => setConfirm(e.target.value)}
         error={error ?? undefined}
         autoComplete="new-password"
+        revealed={confirmRevealed}
+        onRevealedChange={setConfirmRevealed}
       />
       <InlineWarning>
         There is no recovery. If you forget this password, your vault cannot be opened — by anyone.
@@ -73,7 +92,7 @@ export function CreateVaultForm({ onCreated }: CreateVaultFormProps) {
         />
         I understand my vault is unrecoverable without this password.
       </label>
-      <Button type="submit" variant="primary" busy={busy} disabled={!acknowledged}>
+      <Button type="submit" variant="primary" busy={busy} disabled={!acknowledged || !password}>
         Create vault
       </Button>
     </form>

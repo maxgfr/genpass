@@ -1,9 +1,11 @@
+import { useState } from 'react'
 import '../../styles/vault.css'
 import { useVault } from '../../state/VaultProvider'
 import { Button } from '../ui/Button'
 import { EmptyState } from '../ui/EmptyState'
 import { InlineWarning } from '../ui/InlineWarning'
-import { LockIcon } from '../ui/icons'
+import { LockIcon, PlusIcon } from '../ui/icons'
+import { AddEntryDialog } from './AddEntryDialog'
 import { CreateVaultForm } from './CreateVaultForm'
 import { EntryRow } from './EntryRow'
 import { UnlockForm } from './UnlockForm'
@@ -15,6 +17,7 @@ interface VaultViewProps {
 
 export function VaultView({ onShare }: VaultViewProps = {}) {
   const vault = useVault()
+  const [adding, setAdding] = useState(false)
 
   if (vault.corrupt) {
     return (
@@ -51,6 +54,10 @@ export function VaultView({ onShare }: VaultViewProps = {}) {
                 : `${entries.length} saved ${entries.length === 1 ? 'password' : 'passwords'}`}
             </span>
             <div className="vault__actions">
+              <Button small onClick={() => setAdding(true)}>
+                <PlusIcon size={14} />
+                Add
+              </Button>
               <VaultToolbarExtras />
               <Button small onClick={vault.lock}>
                 <LockIcon size={14} />
@@ -60,8 +67,8 @@ export function VaultView({ onShare }: VaultViewProps = {}) {
           </div>
           {entries.length === 0 ? (
             <EmptyState title="Your vault is empty">
-              Generate a password, then use its save button to keep it here — encrypted on this
-              device.
+              Generate a password and save it from the generator, or use Add above to store one you
+              already have — everything stays encrypted on this device.
             </EmptyState>
           ) : (
             <ul className="vault__list">
@@ -70,6 +77,7 @@ export function VaultView({ onShare }: VaultViewProps = {}) {
               ))}
             </ul>
           )}
+          <AddEntryDialog open={adding} onClose={() => setAdding(false)} />
         </>
       )
     }

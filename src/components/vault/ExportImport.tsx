@@ -83,10 +83,6 @@ export function VaultToolbarExtras() {
 
   const confirmChange = async (e: FormEvent) => {
     e.preventDefault()
-    if (newPw.length < 10) {
-      setChangeError('Use at least 10 characters.')
-      return
-    }
     if (newPw !== confirmPw) {
       setChangeError('The new passwords do not match.')
       return
@@ -170,7 +166,7 @@ export function VaultToolbarExtras() {
             label="New master password"
             value={newPw}
             onChange={(e) => setNewPw(e.target.value)}
-            hint="At least 10 characters."
+            hint="A long passphrase works well."
             autoComplete="new-password"
           />
           <PasswordInput
