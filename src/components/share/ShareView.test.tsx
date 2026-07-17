@@ -2,7 +2,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { createShareFragment, parseShareFragment } from '../../lib/share'
+import { createShareFragment, openShare, parseShareFragment } from '../../lib/share'
 import { ToastProvider } from '../../state/useToasts'
 import { TEST_ITERATIONS } from '../../test/helpers'
 import { ShareOpenDialog } from './ShareOpenDialog'
@@ -85,7 +85,57 @@ describe('ShareView — encrypted link mode', () => {
     const link = (await screen.findByRole('textbox', { name: /share link/i })) as HTMLInputElement
     expect(link.value).toContain('#s=')
     expect(screen.getByRole('img', { name: /share link/i })).toBeTruthy()
-    expect(screen.getByText(/no expiry/i)).toBeTruthy()
+    expect(screen.getByText(/no one-time view/i)).toBeTruthy()
+    expect(screen.getByText(/until it expires/i)).toBeTruthy()
+  })
+
+  it('embeds the default 24-hour expiry in the encrypted payload', async () => {
+    const user = userEvent.setup()
+    render(
+      <ToastProvider>
+        <ShareView prefill="MySecret!42" />
+      </ToastProvider>,
+    )
+    const select = screen.getByLabelText(/link expires/i) as HTMLSelectElement
+    expect(select.value).toBe('86400000')
+    const before = Date.now()
+    await user.click(screen.getByRole('button', { name: /create encrypted link/i }))
+    const link = (await screen.findByRole('textbox', { name: /share link/i })) as HTMLInputElement
+    const parsed = parseShareFragment(new URL(link.value).hash)!
+    const payload = await openShare(parsed.envelope)
+    expect(payload.exp).toBeGreaterThanOrEqual(before + 86_400_000)
+    expect(payload.exp).toBeLessThanOrEqual(Date.now() + 86_400_000)
+  })
+
+  it('omits exp when expiry is set to Never', async () => {
+    const user = userEvent.setup()
+    render(
+      <ToastProvider>
+        <ShareView prefill="MySecret!42" />
+      </ToastProvider>,
+    )
+    await user.selectOptions(
+      screen.getByLabelText(/link expires/i),
+      screen.getByRole('option', { name: 'Never' }),
+    )
+    await user.click(screen.getByRole('button', { name: /create encrypted link/i }))
+    const link = (await screen.findByRole('textbox', { name: /share link/i })) as HTMLInputElement
+    const payload = await openShare(parseShareFragment(new URL(link.value).hash)!.envelope)
+    expect(payload.exp).toBeUndefined()
+  })
+
+  it('blocks a passphrase shorter than 10 characters', async () => {
+    const user = userEvent.setup()
+    render(
+      <ToastProvider>
+        <ShareView prefill="MySecret!42" />
+      </ToastProvider>,
+    )
+    await user.type(screen.getByLabelText(/^passphrase/i), 'short')
+    await user.click(screen.getByRole('button', { name: /create encrypted link/i }))
+    expect(await screen.findByRole('alert')).toBeTruthy()
+    expect(screen.getByText('Use at least 10 characters.')).toBeTruthy()
+    expect(screen.queryByRole('textbox', { name: /share link/i })).toBeNull()
   })
 })
 
@@ -120,5 +170,38 @@ describe('ShareOpenDialog', () => {
     await user.type(screen.getByLabelText(/passphrase/i), 'sesame')
     await user.click(screen.getByRole('button', { name: /reveal secret/i }))
     expect(await screen.findByText('hidden')).toBeTruthy()
+  })
+
+  it('shows the expired state instead of the secret', async () => {
+    const user = userEvent.setup()
+    const fragment = await createShareFragment({ secret: 'gone-secret', exp: Date.now() - 1000 }, null)
+    const parsed = parseShareFragment(fragment)!
+    render(
+      <ToastProvider>
+        <ShareOpenDialog parsed={parsed} onClose={vi.fn()} />
+      </ToastProvider>,
+    )
+    await user.click(screen.getByRole('button', { name: /reveal secret/i }))
+    expect(await screen.findByText(/this link expired on/i)).toBeTruthy()
+    expect(screen.queryByText('gone-secret')).toBeNull()
+  })
+
+  it('reports expiry, not a wrong passphrase, on an expired pass-mode link', async () => {
+    const user = userEvent.setup()
+    const fragment = await createShareFragment(
+      { secret: 'gone-secret', exp: Date.now() - 1000 },
+      'open sesame',
+      TEST_ITERATIONS,
+    )
+    const parsed = parseShareFragment(fragment)!
+    render(
+      <ToastProvider>
+        <ShareOpenDialog parsed={parsed} onClose={vi.fn()} />
+      </ToastProvider>,
+    )
+    await user.type(screen.getByLabelText(/passphrase/i), 'open sesame')
+    await user.click(screen.getByRole('button', { name: /reveal secret/i }))
+    expect(await screen.findByText(/this link expired on/i)).toBeTruthy()
+    expect(screen.queryByText(/wrong passphrase/i)).toBeNull()
   })
 })

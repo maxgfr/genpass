@@ -1,6 +1,6 @@
 import { vi } from 'vitest'
 
-/** Production uses 600k PBKDF2 iterations; tests use 1k to stay fast. */
+/** Production uses 1M PBKDF2 iterations; tests use 1k to stay fast. */
 export const TEST_ITERATIONS = 1_000
 
 /** Minimal in-memory Storage for vaultStorage/settings tests. */

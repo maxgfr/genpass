@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { TEST_ITERATIONS } from '../test/helpers'
 import { VaultDecryptError } from './vaultCrypto'
 import {
+  ShareExpiredError,
   ShareFormatError,
   createShareFragment,
   openShare,
@@ -42,6 +43,44 @@ describe('share round trips', () => {
   it('fragments are URL-safe (no +, /, =, #)', async () => {
     const fragment = await createShareFragment(payload, null)
     expect(fragment).toMatch(/^s=[A-Za-z0-9_-]+$/)
+  })
+})
+
+describe('share expiry', () => {
+  const exp = 1_700_000_000_000
+
+  it('round-trips exp and opens before the deadline', async () => {
+    const fragment = await createShareFragment({ ...payload, exp }, null)
+    const parsed = parseShareFragment(fragment)!
+    await expect(openShare(parsed.envelope, undefined, exp - 1)).resolves.toEqual({ ...payload, exp })
+  })
+
+  it('key mode: rejects an expired link with ShareExpiredError carrying the deadline', async () => {
+    const fragment = await createShareFragment({ ...payload, exp }, null)
+    const parsed = parseShareFragment(fragment)!
+    const err = await openShare(parsed.envelope, undefined, exp + 1).then(
+      () => null,
+      (e: unknown) => e,
+    )
+    expect(err).toBeInstanceOf(ShareExpiredError)
+    expect((err as ShareExpiredError).expiredAt).toBe(exp)
+  })
+
+  it('pass mode: the right passphrase surfaces expiry, a wrong one stays a decrypt error', async () => {
+    const fragment = await createShareFragment({ ...payload, exp }, 'open sesame', TEST_ITERATIONS)
+    const parsed = parseShareFragment(fragment)!
+    await expect(openShare(parsed.envelope, 'open sesame', exp + 1)).rejects.toBeInstanceOf(
+      ShareExpiredError,
+    )
+    await expect(openShare(parsed.envelope, 'wrong', exp + 1)).rejects.toBeInstanceOf(
+      VaultDecryptError,
+    )
+  })
+
+  it('legacy links without exp never expire', async () => {
+    const fragment = await createShareFragment(payload, null)
+    const parsed = parseShareFragment(fragment)!
+    await expect(openShare(parsed.envelope, undefined, Date.UTC(3000, 0))).resolves.toEqual(payload)
   })
 })
 

@@ -7,8 +7,22 @@ import { useToasts } from '../../state/useToasts'
 import { Button } from '../ui/Button'
 import { InlineWarning } from '../ui/InlineWarning'
 import { Segmented } from '../ui/Segmented'
+import { Select } from '../ui/Select'
 import { PasswordInput, TextInput } from '../ui/TextInput'
 import { QrCode, qrPngBlob, qrSvgDocument } from './QrCode'
+
+const MIN_PASSPHRASE_LENGTH = 10
+
+/** ms === 0 means "never": no exp field in the payload. */
+const EXPIRY_PRESETS = [
+  { label: '1 hour', ms: 3_600_000 },
+  { label: '24 hours', ms: 86_400_000 },
+  { label: '7 days', ms: 604_800_000 },
+  { label: '30 days', ms: 2_592_000_000 },
+  { label: 'Never', ms: 0 },
+] as const
+
+const DEFAULT_EXPIRY_MS = 86_400_000
 
 function download(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob)
@@ -31,16 +45,26 @@ export function ShareView({ prefill }: ShareViewProps) {
   const [text, setText] = useState(prefill ?? '')
   const [label, setLabel] = useState('')
   const [passphrase, setPassphrase] = useState('')
+  const [passError, setPassError] = useState<string | null>(null)
+  const [expiryMs, setExpiryMs] = useState(DEFAULT_EXPIRY_MS)
   const [link, setLink] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
   const createLink = async (e: FormEvent) => {
     e.preventDefault()
     if (!text) return
+    if (passphrase && passphrase.length < MIN_PASSPHRASE_LENGTH) {
+      setPassError(`Use at least ${MIN_PASSPHRASE_LENGTH} characters.`)
+      return
+    }
     setBusy(true)
     try {
       const fragment = await createShareFragment(
-        { secret: text, label: label.trim() || undefined },
+        {
+          secret: text,
+          label: label.trim() || undefined,
+          exp: expiryMs > 0 ? Date.now() + expiryMs : undefined,
+        },
         passphrase || null,
       )
       setLink(buildShareUrl(fragment))
@@ -132,10 +156,27 @@ export function ShareView({ prefill }: ShareViewProps) {
               value={passphrase}
               onChange={(e) => {
                 setPassphrase(e.target.value)
+                setPassError(null)
                 setLink(null)
               }}
-              hint="With a passphrase, the link alone is useless — tell the recipient the passphrase over a different channel."
+              hint="With a passphrase, the link alone is useless — tell the recipient the passphrase over a different channel. Use at least 10 characters; a generated 4-word passphrase is best."
+              error={passError ?? undefined}
             />
+            <Select
+              label="Link expires"
+              value={expiryMs}
+              onChange={(e) => {
+                setExpiryMs(Number(e.target.value))
+                setLink(null)
+              }}
+              hint="Checked on the opening device when the link is used — this app will refuse to reveal the secret after the deadline, but it cannot destroy copies of a link that has already been shared."
+            >
+              {EXPIRY_PRESETS.map((preset) => (
+                <option key={preset.ms} value={preset.ms}>
+                  {preset.label}
+                </option>
+              ))}
+            </Select>
             <Button type="submit" variant="primary" busy={busy} disabled={!text}>
               Create encrypted link
             </Button>
@@ -156,9 +197,10 @@ export function ShareView({ prefill }: ShareViewProps) {
               </p>
             )}
             <InlineWarning>
-              The encrypted secret lives inside this link — there is no server, no expiry, and no
-              one-time view. Anyone with the link{passphrase ? ' and the passphrase' : ''} can read
-              it, and it stays in browser history. Send it over a private channel.
+              The encrypted secret lives inside this link — there is no server and no one-time
+              view. Anyone with the link{passphrase ? ' and the passphrase' : ''} can read it
+              {expiryMs > 0 ? ' until it expires' : ''}, and it stays in browser history. Send it
+              over a private channel.
             </InlineWarning>
           </>
         )}

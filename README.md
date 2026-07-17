@@ -20,11 +20,12 @@ that works fully offline once loaded (installable as a PWA).
   (`length × log2(pool size)`) is the real number, with a crack-time estimate at a stated
   10¹⁰ guesses/s offline-attack rate.
 - **Encrypted vault** — AES-256-GCM, key derived from your master password with PBKDF2-SHA256
-  (600,000 iterations, random per-vault salt). Auto-locks after inactivity. Encrypted
+  (1,000,000 iterations, random per-vault salt). Auto-locks after inactivity. Encrypted
   export/import for backups and moving browsers. Master password can be changed (full re-encrypt
   under a fresh salt).
 - **Share a secret** — the encrypted secret travels inside the link's `#fragment` (never sent to
-  any server). Optionally protected by a passphrase communicated over a separate channel.
+  any server). Optionally protected by a passphrase communicated over a separate channel, with a
+  configurable expiry carried inside the encrypted payload.
 - **QR codes** — for any text, for generated passwords, and for share links; SVG and PNG export.
 - **Theming** — light / dark / auto (follows the OS live), WCAG-conscious OKLCH palette.
 
@@ -41,8 +42,10 @@ that works fully offline once loaded (installable as a PWA).
   password means the vault is gone. Export a backup.
 - **Share links** carry the encrypted secret in the URL fragment. Fragments are not sent to the
   web server, but links persist in browser history and messengers: prefer the passphrase mode and
-  a private channel. Without a server there is **no expiry and no one-time view** — the app says
-  so rather than pretending otherwise.
+  a private channel. An optional expiry travels *inside* the encrypted payload — it cannot be
+  stripped without breaking decryption, and the app refuses to reveal an expired secret. This is
+  soft expiry, enforced by the opening device's clock: without a server there is still **no
+  revocation and no one-time view** — the app says so rather than pretending otherwise.
 - **Honest limits:** JavaScript strings cannot be zeroed from memory; an unlocked vault is
   readable by anyone with access to your unlocked device/session (that is the threat model of any
   password manager while open); clipboard auto-clear is best-effort (browsers block clipboard

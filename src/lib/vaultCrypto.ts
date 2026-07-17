@@ -4,7 +4,9 @@
 import { randomBytes } from './random'
 import { fromBase64, toBase64, type EncryptedVaultFile, type VaultPayload } from './vaultFormat'
 
-export const DEFAULT_ITERATIONS = 600_000
+// Above OWASP's 600k floor for PBKDF2-HMAC-SHA256; vault files and share
+// links both store their iteration count, so older artifacts stay readable.
+export const DEFAULT_ITERATIONS = 1_000_000
 export const SALT_BYTES = 16
 export const IV_BYTES = 12
 

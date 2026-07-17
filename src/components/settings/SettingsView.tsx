@@ -89,7 +89,7 @@ export function SettingsView() {
         <p className="vault__locked-hint">
           Everything happens in your browser. Generated passwords never leave this device; the app
           makes no network requests and works fully offline. The vault is stored locally, encrypted
-          with AES-256-GCM using a key derived from your master password (PBKDF2, 600,000
+          with AES-256-GCM using a key derived from your master password (PBKDF2, 1,000,000
           iterations). Nobody — including this site — can read it without that password, and there
           is no recovery if you forget it. Settings on this page are stored unencrypted; passwords
           never are.

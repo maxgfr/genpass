@@ -53,7 +53,7 @@ const VaultContext = createContext<VaultApi | null>(null)
 
 interface VaultProviderProps {
   children: ReactNode
-  /** Production default 600k; tests pass a low value. */
+  /** Production default 1M; tests pass a low value. */
   iterations?: number
 }
 

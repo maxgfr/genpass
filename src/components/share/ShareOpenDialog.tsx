@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import '../../styles/share.css'
 import { copyText } from '../../lib/clipboard'
-import { openShare, type ParsedShare, type SharePayload } from '../../lib/share'
+import { ShareExpiredError, openShare, type ParsedShare, type SharePayload } from '../../lib/share'
 import { VaultDecryptError } from '../../lib/vaultCrypto'
 import { useToasts } from '../../state/useToasts'
 import { Button } from '../ui/Button'
@@ -19,12 +19,14 @@ export function ShareOpenDialog({ parsed, onClose }: ShareOpenDialogProps) {
   const [passphrase, setPassphrase] = useState('')
   const [payload, setPayload] = useState<SharePayload | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [expiredAt, setExpiredAt] = useState<number | null>(null)
   const [busy, setBusy] = useState(false)
 
   const close = () => {
     setPayload(null)
     setPassphrase('')
     setError(null)
+    setExpiredAt(null)
     onClose()
   }
 
@@ -38,11 +40,15 @@ export function ShareOpenDialog({ parsed, onClose }: ShareOpenDialogProps) {
       setPassphrase('')
     } catch (err) {
       setPassphrase('')
-      setError(
-        err instanceof VaultDecryptError && parsed.needsPassphrase
-          ? 'Wrong passphrase, or the link is damaged.'
-          : 'This link is damaged and cannot be opened.',
-      )
+      if (err instanceof ShareExpiredError) {
+        setExpiredAt(err.expiredAt)
+      } else {
+        setError(
+          err instanceof VaultDecryptError && parsed.needsPassphrase
+            ? 'Wrong passphrase, or the link is damaged.'
+            : 'This link is damaged and cannot be opened.',
+        )
+      }
     } finally {
       setBusy(false)
     }
@@ -57,7 +63,17 @@ export function ShareOpenDialog({ parsed, onClose }: ShareOpenDialogProps) {
 
   return (
     <Dialog open={parsed !== null} title="A secret was shared with you" onClose={close}>
-      {!payload ? (
+      {expiredAt !== null ? (
+        <div className="vault-form">
+          <p className="vault__locked-hint" role="alert">
+            This link expired on {new Date(expiredAt).toLocaleString()} and the secret can no
+            longer be revealed.
+          </p>
+          <div className="dialog__actions">
+            <Button onClick={close}>Close</Button>
+          </div>
+        </div>
+      ) : !payload ? (
         <form onSubmit={reveal} className="vault-form">
           <p className="vault__locked-hint">
             This link carries an encrypted secret. It is decrypted here, on your device only.
