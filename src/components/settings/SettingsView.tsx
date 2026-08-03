@@ -9,6 +9,7 @@ import { Segmented } from '../ui/Segmented'
 import { Select } from '../ui/Select'
 import { CharacterOptions } from '../generator/CharacterOptions'
 import { PassphraseOptions } from '../generator/PassphraseOptions'
+import { PinOptions } from '../generator/PinOptions'
 
 export function SettingsView() {
   const { settings, update } = useSettings()
@@ -82,6 +83,7 @@ export function SettingsView() {
             options={[
               { value: 'characters', label: 'Characters' },
               { value: 'passphrase', label: 'Passphrase' },
+              { value: 'pin', label: 'PIN' },
             ]}
           />
           <Segmented
@@ -105,6 +107,14 @@ export function SettingsView() {
         <PassphraseOptions
           value={settings.passphrase}
           onChange={(patch) => update({ passphrase: { ...settings.passphrase, ...patch } })}
+        />
+      </section>
+
+      <section className="panel" aria-label="PIN defaults">
+        <h2 className="panel__title">PIN defaults</h2>
+        <PinOptions
+          value={settings.pin}
+          onChange={(patch) => update({ pin: { ...settings.pin, ...patch } })}
         />
       </section>
 

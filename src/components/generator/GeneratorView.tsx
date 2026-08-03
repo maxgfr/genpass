@@ -5,7 +5,8 @@ import { copyWithAutoClear } from '../../lib/clipboard'
 import { passphraseEntropyBits, passwordEntropyBits } from '../../lib/entropy'
 import { generatePasswords } from '../../lib/generator'
 import { generatePassphrase } from '../../lib/passphrase'
-import type { PassphraseSettings } from '../../lib/settings'
+import { PIN_POOL_SIZE, generatePins } from '../../lib/pin'
+import type { GeneratorSettings, PassphraseSettings, PinSettings } from '../../lib/settings'
 import { getWordlist } from '../../lib/wordlist'
 import { useSettings } from '../../state/SettingsProvider'
 import { useToasts } from '../../state/useToasts'
@@ -15,6 +16,7 @@ import { Segmented } from '../ui/Segmented'
 import { CheckIcon, CopyIcon, RefreshIcon, SaveIcon, ShareIcon } from '../ui/icons'
 import { CharacterOptions, CLASS_LABELS, type CharacterOptionsValue } from './CharacterOptions'
 import { PassphraseOptions } from './PassphraseOptions'
+import { PinOptions } from './PinOptions'
 import { StrengthMeter } from './StrengthMeter'
 
 interface GeneratorViewProps {
@@ -28,7 +30,7 @@ export function GeneratorView({ onSave, onShare }: GeneratorViewProps) {
   const { settings } = useSettings()
   const { toast } = useToasts()
 
-  const [mode, setMode] = useState<'characters' | 'passphrase'>(settings.generator.mode)
+  const [mode, setMode] = useState<GeneratorSettings['mode']>(settings.generator.mode)
   const [batchSize, setBatchSize] = useState<1 | 10>(settings.generator.batchSize)
   const [charOpts, setCharOpts] = useState<CharacterOptionsValue>(() => ({
     length: settings.generator.length,
@@ -40,15 +42,24 @@ export function GeneratorView({ onSave, onShare }: GeneratorViewProps) {
     excludeCustom: settings.generator.excludeCustom,
   }))
   const [passOpts, setPassOpts] = useState<PassphraseSettings>(() => ({ ...settings.passphrase }))
+  const [pinOpts, setPinOpts] = useState<PinSettings>(() => ({ ...settings.pin }))
   const [results, setResults] = useState<string[]>([])
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null)
 
   const analysis = useMemo(() => analyzePool({ ...charOpts }), [charOpts])
 
-  const bits =
-    mode === 'characters'
-      ? passwordEntropyBits(charOpts.length, analysis.pool.length)
-      : passphraseEntropyBits({ wordCount: passOpts.wordCount, includeDigit: passOpts.includeDigit })
+  let bits: number
+  switch (mode) {
+    case 'characters':
+      bits = passwordEntropyBits(charOpts.length, analysis.pool.length)
+      break
+    case 'passphrase':
+      bits = passphraseEntropyBits({ wordCount: passOpts.wordCount, includeDigit: passOpts.includeDigit })
+      break
+    case 'pin':
+      bits = passwordEntropyBits(pinOpts.length, PIN_POOL_SIZE)
+      break
+  }
 
   const regenerate = useCallback(() => {
     setCopiedIndex(null)
@@ -58,11 +69,13 @@ export function GeneratorView({ onSave, onShare }: GeneratorViewProps) {
         return
       }
       setResults(generatePasswords({ ...charOpts }, batchSize))
+    } else if (mode === 'pin') {
+      setResults(generatePins(pinOpts.length, batchSize))
     } else {
       const wordlist = getWordlist()
       setResults(Array.from({ length: batchSize }, () => generatePassphrase(passOpts, wordlist)))
     }
-  }, [mode, batchSize, charOpts, passOpts, analysis.poolEmpty])
+  }, [mode, batchSize, charOpts, passOpts, pinOpts.length, analysis.poolEmpty])
 
   useEffect(() => {
     regenerate()
@@ -97,6 +110,7 @@ export function GeneratorView({ onSave, onShare }: GeneratorViewProps) {
           options={[
             { value: 'characters', label: 'Characters' },
             { value: 'passphrase', label: 'Passphrase' },
+            { value: 'pin', label: 'PIN' },
           ]}
         />
         <div className="gen__controls">
@@ -129,6 +143,12 @@ export function GeneratorView({ onSave, onShare }: GeneratorViewProps) {
           {analysis.emptiedClasses.map((c) => CLASS_LABELS[c].split(' ')[0]).join(', ')}{' '}
           {analysis.emptiedClasses.length === 1 ? 'is' : 'are'} fully excluded — passwords are no longer
           guaranteed to contain one.
+        </InlineWarning>
+      )}
+      {mode === 'pin' && (
+        <InlineWarning>
+          Digits only, so this is weak by construction — only use it where the service caps failed
+          attempts or locks out. Prefer Characters or Passphrase everywhere else.
         </InlineWarning>
       )}
 
@@ -167,10 +187,14 @@ export function GeneratorView({ onSave, onShare }: GeneratorViewProps) {
 
       <section className="panel" aria-label="Options">
         <h2 className="panel__title">Options</h2>
-        {mode === 'characters' ? (
+        {mode === 'characters' && (
           <CharacterOptions value={charOpts} onChange={(patch) => setCharOpts((v) => ({ ...v, ...patch }))} />
-        ) : (
+        )}
+        {mode === 'passphrase' && (
           <PassphraseOptions value={passOpts} onChange={(patch) => setPassOpts((v) => ({ ...v, ...patch }))} />
+        )}
+        {mode === 'pin' && (
+          <PinOptions value={pinOpts} onChange={(patch) => setPinOpts((v) => ({ ...v, ...patch }))} />
         )}
       </section>
     </>

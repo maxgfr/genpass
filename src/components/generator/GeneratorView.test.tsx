@@ -135,3 +135,59 @@ describe('GeneratorView — passphrase mode', () => {
     expect(passwords()[0]!.split('-')).toHaveLength(8)
   })
 })
+
+describe('GeneratorView — PIN mode', () => {
+  async function switchToPin() {
+    const user = setupUser()
+    renderView()
+    await user.click(screen.getByRole('radio', { name: 'PIN' }))
+    return user
+  }
+
+  it('generates one 8-digit PIN by default', async () => {
+    await switchToPin()
+    expect(passwords()).toHaveLength(1)
+    expect(passwords()[0]).toMatch(/^\d{8}$/)
+  })
+
+  it('digit count follows the slider, below the password length floor', async () => {
+    await switchToPin()
+    fireEvent.change(screen.getByRole('slider', { name: /digits/i }), { target: { value: '4' } })
+    expect(passwords()[0]).toMatch(/^\d{4}$/)
+  })
+
+  it('says out loud that a PIN is weak', async () => {
+    await switchToPin()
+    expect(screen.getByText(/digits only/i)).toBeTruthy()
+    expect(screen.getByText('weak')).toBeTruthy()
+    expect(screen.getByText(/cracked instantly/i)).toBeTruthy()
+  })
+
+  it('offers no character-class or exclusion controls', async () => {
+    await switchToPin()
+    expect(screen.queryByRole('switch', { name: /uppercase/i })).toBeNull()
+    expect(screen.queryByLabelText(/exclude characters/i)).toBeNull()
+  })
+
+  it('batches ten PINs, each copyable', async () => {
+    const user = await switchToPin()
+    await user.click(screen.getByRole('radio', { name: /10/ }))
+    expect(passwords()).toHaveLength(10)
+    for (const pin of passwords()) expect(pin).toMatch(/^\d{8}$/)
+    expect(screen.getAllByRole('button', { name: /^copy$/i })).toHaveLength(10)
+  })
+
+  it('copies a PIN to the clipboard', async () => {
+    const user = await switchToPin()
+    const pin = passwords()[0]!
+    await user.click(screen.getByRole('button', { name: /^copy$/i }))
+    expect(writeText).toHaveBeenCalledWith(pin)
+  })
+
+  it('leaves character-mode options untouched when switching back', async () => {
+    const user = await switchToPin()
+    await user.click(screen.getByRole('radio', { name: /characters/i }))
+    expect(passwords()[0]).toHaveLength(20)
+    expect(screen.getByRole('switch', { name: /symbols/i }).getAttribute('aria-checked')).toBe('true')
+  })
+})

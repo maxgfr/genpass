@@ -7,7 +7,7 @@ import type { PassphraseSeparator } from './passphrase'
 export const SETTINGS_STORAGE_KEY = 'genpass.settings'
 
 export interface GeneratorSettings {
-  mode: 'characters' | 'passphrase'
+  mode: 'characters' | 'passphrase' | 'pin'
   length: number
   uppercase: boolean
   lowercase: boolean
@@ -25,6 +25,12 @@ export interface PassphraseSettings {
   includeDigit: boolean
 }
 
+/** Digits-only secret. Its own range because a PIN legitimately goes below
+ *  LENGTH_MIN, which stays the floor for real passwords. */
+export interface PinSettings {
+  length: number
+}
+
 export interface Settings {
   version: 1
   theme: 'light' | 'dark' | 'auto'
@@ -32,12 +38,15 @@ export interface Settings {
   clipboardClearSeconds: 0 | 15 | 30 | 60
   generator: GeneratorSettings
   passphrase: PassphraseSettings
+  pin: PinSettings
 }
 
 export const LENGTH_MIN = 8
 export const LENGTH_MAX = 64
 export const WORD_COUNT_MIN = 3
 export const WORD_COUNT_MAX = 10
+export const PIN_LENGTH_MIN = 4
+export const PIN_LENGTH_MAX = 12
 
 export const DEFAULT_SETTINGS: Settings = {
   version: 1,
@@ -60,6 +69,9 @@ export const DEFAULT_SETTINGS: Settings = {
     separator: '-',
     capitalize: true,
     includeDigit: false,
+  },
+  pin: {
+    length: 8,
   },
 }
 
@@ -86,13 +98,14 @@ function mergeSettings(raw: unknown): Settings {
   const o = raw as Record<string, unknown>
   const g = (typeof o.generator === 'object' && o.generator !== null ? o.generator : {}) as Record<string, unknown>
   const p = (typeof o.passphrase === 'object' && o.passphrase !== null ? o.passphrase : {}) as Record<string, unknown>
+  const n = (typeof o.pin === 'object' && o.pin !== null ? o.pin : {}) as Record<string, unknown>
   return {
     version: 1,
     theme: pick(o.theme, ['light', 'dark', 'auto'] as const, d.theme),
     autoLockMinutes: pick(o.autoLockMinutes, [1, 5, 15, 30] as const, d.autoLockMinutes),
     clipboardClearSeconds: pick(o.clipboardClearSeconds, [0, 15, 30, 60] as const, d.clipboardClearSeconds),
     generator: {
-      mode: pick(g.mode, ['characters', 'passphrase'] as const, d.generator.mode),
+      mode: pick(g.mode, ['characters', 'passphrase', 'pin'] as const, d.generator.mode),
       length: clampInt(g.length, LENGTH_MIN, LENGTH_MAX, d.generator.length),
       uppercase: bool(g.uppercase, d.generator.uppercase),
       lowercase: bool(g.lowercase, d.generator.lowercase),
@@ -107,6 +120,9 @@ function mergeSettings(raw: unknown): Settings {
       separator: pick(p.separator, ['-', ' ', '.', '_', ''] as const, d.passphrase.separator),
       capitalize: bool(p.capitalize, d.passphrase.capitalize),
       includeDigit: bool(p.includeDigit, d.passphrase.includeDigit),
+    },
+    pin: {
+      length: clampInt(n.length, PIN_LENGTH_MIN, PIN_LENGTH_MAX, d.pin.length),
     },
   }
 }

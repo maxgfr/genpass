@@ -13,6 +13,14 @@ describe('passwordEntropyBits', () => {
     expect(passwordEntropyBits(8, 26)).toBeCloseTo(8 * Math.log2(26), 10)
   })
 
+  it('rates a digits-only PIN honestly', () => {
+    // The whole point of surfacing PIN mode is that this number stays true.
+    expect(passwordEntropyBits(8, 10)).toBeCloseTo(26.575, 3)
+    expect(strengthFromBits(passwordEntropyBits(8, 10))).toBe('weak')
+    expect(formatCrackTime(crackTimeSeconds(passwordEntropyBits(8, 10)))).toBe('instant')
+    expect(strengthFromBits(passwordEntropyBits(12, 10))).toBe('weak')
+  })
+
   it('returns 0 for degenerate pools', () => {
     expect(passwordEntropyBits(20, 0)).toBe(0)
     expect(passwordEntropyBits(20, 1)).toBe(0)

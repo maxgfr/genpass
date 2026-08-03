@@ -76,6 +76,27 @@ describe('SettingsView', () => {
     expect(pw).not.toMatch(/[z9]/)
   })
 
+  it('pin defaults persist and seed the next GeneratorView mount', async () => {
+    const user = userEvent.setup()
+    const { unmount } = renderSettings()
+    await user.click(screen.getByRole('radio', { name: 'PIN' }))
+    fireEvent.change(screen.getByRole('slider', { name: /digits/i }), { target: { value: '6' } })
+    expect(JSON.parse(localStorage.getItem(SETTINGS_STORAGE_KEY)!)).toMatchObject({
+      generator: { mode: 'pin' },
+      pin: { length: 6 },
+    })
+    unmount()
+
+    render(
+      <SettingsProvider>
+        <ToastProvider>
+          <GeneratorView />
+        </ToastProvider>
+      </SettingsProvider>,
+    )
+    expect(screen.getByTestId('password').textContent).toMatch(/^\d{6}$/)
+  })
+
   it('erase vault is disabled when no vault exists', async () => {
     renderSettings()
     const trigger = (await screen.findByRole('button', { name: 'Erase vault…' })) as HTMLButtonElement

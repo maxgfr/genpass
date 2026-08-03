@@ -15,6 +15,7 @@ describe('settings', () => {
     expect(DEFAULT_SETTINGS.generator.batchSize).toBe(1)
     expect(DEFAULT_SETTINGS.generator.excludeCustom).toBe('')
     expect(DEFAULT_SETTINGS.passphrase.wordCount).toBe(5)
+    expect(DEFAULT_SETTINGS.pin.length).toBe(8)
   })
 
   it('round-trips a full settings object', () => {
@@ -24,6 +25,7 @@ describe('settings', () => {
       theme: 'dark' as const,
       generator: { ...DEFAULT_SETTINGS.generator, excludeCustom: 'aeiou@', batchSize: 10 as const, length: 32 },
       passphrase: { ...DEFAULT_SETTINGS.passphrase, wordCount: 7, separator: '.' as const },
+      pin: { length: 6 },
     }
     saveSettings(custom, storage)
     expect(loadSettings(storage)).toEqual(custom)
@@ -63,5 +65,25 @@ describe('settings', () => {
     const loaded = loadSettings(storage)
     expect(loaded.generator.length).toBe(64)
     expect(loaded.passphrase.wordCount).toBe(10)
+  })
+
+  it('accepts pin as a generator mode and clamps the pin length to its own range', () => {
+    const storage = memoryStorage()
+    storage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ generator: { mode: 'pin' }, pin: { length: 2 } }))
+    const loaded = loadSettings(storage)
+    expect(loaded.generator.mode).toBe('pin')
+    expect(loaded.pin.length).toBe(4)
+
+    storage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ pin: { length: 99 } }))
+    expect(loadSettings(storage).pin.length).toBe(12)
+  })
+
+  it('falls back for an unknown mode and for a blob predating the pin block', () => {
+    const storage = memoryStorage()
+    storage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ generator: { mode: 'morse', length: 24 } }))
+    const loaded = loadSettings(storage)
+    expect(loaded.generator.mode).toBe('characters')
+    expect(loaded.generator.length).toBe(24)
+    expect(loaded.pin).toEqual(DEFAULT_SETTINGS.pin)
   })
 })

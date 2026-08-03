@@ -16,6 +16,10 @@ that works fully offline once loaded (installable as a PWA).
   generation (×1 / ×10), one-click copy with optional clipboard auto-clear.
 - **Passphrases** — 3–10 words from the EFF large wordlist (7,776 words, bundled), separator
   choice, capitalization, optional digit.
+- **PIN codes** — digits only, 4–12 digits (8 by default), for the services that accept nothing
+  else. Drawn uniformly with no pattern filtering, so the meter tells the truth rather than
+  flattering it: 8 digits is 26.6 bits and falls instantly to an offline attack. Only safe where
+  the service itself caps failed attempts.
 - **Exact strength meter** — because sampling is uniform, the displayed entropy
   (`length × log2(pool size)`) is the real number, with a crack-time estimate at a stated
   10¹⁰ guesses/s offline-attack rate.
