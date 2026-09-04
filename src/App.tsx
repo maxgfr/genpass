@@ -8,6 +8,7 @@ import { ShareOpenDialog } from './components/share/ShareOpenDialog'
 import { ShareView } from './components/share/ShareView'
 import { SaveEntryDialog } from './components/vault/SaveEntryDialog'
 import { VaultView } from './components/vault/VaultView'
+import { WatermarkView } from './components/watermark/WatermarkView'
 import { IconButton } from './components/ui/Button'
 import { LockIcon } from './components/ui/icons'
 import { parseShareFragment, type ParsedShare } from './lib/share'
@@ -80,6 +81,7 @@ function Shell() {
         {tab === 'generator' && <GeneratorView onSave={setSaveTarget} onShare={share} />}
         {tab === 'vault' && <VaultView onShare={share} />}
         {tab === 'share' && <ShareView prefill={sharePrefill} />}
+        {tab === 'watermark' && <WatermarkView />}
         {tab === 'settings' && <SettingsView />}
       </AppShell>
       <SaveEntryDialog password={saveTarget} onClose={() => setSaveTarget(null)} />

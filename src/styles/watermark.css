@@ -1,0 +1,172 @@
+.wm__drop {
+  display: grid;
+  place-items: center;
+  gap: var(--space-2);
+  padding: var(--space-6) var(--space-4);
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  text-align: center;
+  transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+}
+
+/* Drag state is carried by the border AND the wording below it, never by
+   colour alone. */
+.wm__drop--over {
+  border-color: var(--primary);
+  border-style: solid;
+  background: var(--primary-soft);
+}
+
+.wm__drop-hint {
+  font-size: var(--text-xs);
+  color: var(--muted);
+  max-width: 34rem;
+}
+
+.wm__drop svg {
+  color: var(--muted);
+}
+
+.wm__preview-frame {
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface-2);
+  min-height: 8rem;
+}
+
+.wm__preview-frame canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  /* A watermark is judged against the page it sits on, and a PDF page is
+     white in every reader — so is the preview, in both themes. */
+  background: #ffffff;
+}
+
+.wm__preview-caption {
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+
+.wm__colour {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+
+.wm__colour input[type='color'] {
+  inline-size: 3rem;
+  block-size: 2.5rem;
+  padding: 2px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  background: var(--bg);
+  cursor: pointer;
+}
+
+.wm__colour input[type='color']:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.wm__colour-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--muted);
+  padding-block-end: var(--space-2);
+}
+
+.wm__list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.wm__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--bg);
+  flex-wrap: wrap;
+}
+
+.wm__row--error {
+  border-color: var(--danger);
+}
+
+.wm__row-main {
+  flex: 1;
+  min-width: 8rem;
+  display: grid;
+  gap: 2px;
+}
+
+.wm__row-name {
+  font-weight: 600;
+  font-size: var(--text-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wm__row-meta {
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+
+.wm__row-error {
+  font-size: var(--text-xs);
+  color: var(--danger-text);
+}
+
+.wm__row-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* The shared .icon-btn is 36px; anything new here meets the 44px target size
+   the project commits to on touch. */
+@media (pointer: coarse) {
+  .wm__row-actions .btn {
+    min-block-size: 2.75rem;
+  }
+}
+
+.wm__row-format {
+  min-inline-size: 7rem;
+}
+
+/* The row's Select carries its own label already; keep it compact inline. */
+.wm__row-format .field__label {
+  font-size: var(--text-xs);
+}
+
+.wm__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.wm__actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.wm__status {
+  font-size: var(--text-sm);
+  color: var(--muted);
+}

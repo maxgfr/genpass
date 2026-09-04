@@ -12,7 +12,16 @@ const CSP = [
   "img-src 'self' data:",
   "font-src 'self'",
   "manifest-src 'self'",
-  "worker-src 'self'",
+  // blob: is here for exactly one reason: the HEIC decoder (heic-to) starts
+  // libheif in a worker built from an inline Blob, and worker-src 'self' alone
+  // blocks that. The code inside is same-origin code from our own bundle — no
+  // external host is reachable, and connect-src 'self' still stops anything
+  // inside that worker from calling out. child-src repeats it for Safari < 15.5,
+  // which ignores worker-src. Note what is deliberately NOT here: no
+  // 'unsafe-eval' (we import heic-to/csp, which has no `new Function`), and no
+  // 'wasm-unsafe-eval' (heic-to is an asm.js build of libheif, not WASM).
+  "worker-src 'self' blob:",
+  "child-src 'self' blob:",
   "connect-src 'self'",
   "base-uri 'none'",
   "form-action 'none'",
@@ -56,9 +65,32 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+        // The HEIC decoder is a ~3 MB asm.js build of libheif. Precaching it
+        // would weigh down every install and every service-worker update for a
+        // format most people never drop on the app — and it is over Workbox's
+        // 2 MiB precache cap anyway, so it would be dropped with a warning
+        // rather than cached. Cached on first use instead: HEIC therefore
+        // needs one online use before it works offline, which the UI says.
+        globIgnores: ['**/heic-decoder-*.js'],
+        runtimeCaching: [
+          {
+            urlPattern: /heic-decoder-.*\.js$/,
+            handler: 'CacheFirst',
+            options: { cacheName: 'heic-decoder', expiration: { maxEntries: 2 } },
+          },
+        ],
       },
     }),
   ],
+  build: {
+    rollupOptions: {
+      // Keep the decoder in a chunk with a predictable name so the service
+      // worker rules above can single it out.
+      output: {
+        manualChunks: (id: string) => (id.includes('heic-to') ? 'heic-decoder' : undefined),
+      },
+    },
+  },
   test: {
     environment: 'node',
     setupFiles: ['src/test/setup.ts'],

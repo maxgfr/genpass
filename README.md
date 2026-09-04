@@ -31,6 +31,12 @@ that works fully offline once loaded (installable as a PWA).
   any server). Optionally protected by a passphrase communicated over a separate channel, with a
   configurable expiry carried inside the encrypted payload.
 - **QR codes** — for any text, for generated passwords, and for share links; SVG and PNG export.
+- **Watermark** — stamp text across a PDF or an image (PNG, JPEG, WebP, HEIC) without uploading
+  it anywhere. Text, size, opacity, angle, colour, tiled or centred, with a live preview driven by
+  the same code that writes the output. In a PDF the watermark is real vector text on every page,
+  so the file stays small and the document's own text stays selectable. Several files at once,
+  downloaded individually or as a ZIP. A watermark is a visible marking, not protection — it can
+  be cropped or edited out, and the app says so rather than implying otherwise.
 - **Theming** — light / dark / auto (follows the OS live), WCAG-conscious OKLCH palette.
 
 ## Security model
@@ -55,9 +61,29 @@ that works fully offline once loaded (installable as a PWA).
   password manager while open); clipboard auto-clear is best-effort (browsers block clipboard
   writes from unfocused tabs); `localStorage` is per-origin, so it is namespaced under
   `genpass.*` — and the vault blob within it is encrypted.
-- **Supply chain:** a single runtime dependency beyond React (`qrcode`, for QR module-matrix
-  encoding). Web Crypto for everything cryptographic — no crypto libraries. A strict CSP
-  (`default-src 'none'`, no external hosts) is injected at build time.
+- **Supply chain:** three runtime dependencies beyond React. `qrcode` (MIT) for QR module-matrix
+  encoding; `pdf-lib` (MIT) and `heic-to` (LGPL-3.0) for the Watermark tab only, both loaded by
+  dynamic `import()` so neither is in the initial bundle and neither is reachable from the
+  generator, the vault, or the share flow. Web Crypto for everything cryptographic — still no
+  crypto libraries. ZIP writing and file-type sniffing are ~250 lines in `src/lib/`, not a
+  dependency.
+- **The CSP** (`default-src 'none'`, injected at build time, still **no external hosts**) gained
+  exactly one relaxation for the Watermark tab: `worker-src 'self' blob:` (plus `child-src` for
+  Safari < 15.5). `heic-to` starts its libheif decoder in a worker built from an inline Blob, and
+  `worker-src 'self'` blocks that outright. Deliberately *not* added: `'unsafe-eval'` — the app
+  imports `heic-to/csp`, the build with no `new Function` — and `'wasm-unsafe-eval'`, which is
+  simply unnecessary: `heic-to` ships an asm.js build of libheif, not WebAssembly. `script-src`
+  is untouched, and `connect-src 'self'` still means nothing inside that worker can call out.
+  Dropping HEIC support would revert the directive and nothing else.
+- **Licensing:** the project is MIT. `heic-to` is LGPL-3.0 (it embeds libheif and libde265). It
+  ships as a separate, unmodified, dynamically-imported chunk — the standard arrangement that
+  keeps the LGPL's relinking right meaningful for a JavaScript bundle.
+- **Watermark privacy:** the file never leaves the device — there is no upload, and no network
+  call is made to produce it. Re-encoding an image strips its EXIF metadata, including GPS
+  location; PDFs keep their own metadata, and the app does not add any (it does not stamp itself
+  as the Producer). The ~3 MB HEIC decoder is the one asset not precached, so HEIC needs one
+  online use before it works offline; everything else, PDFs included, works offline from the
+  first load.
 
 ## Development
 

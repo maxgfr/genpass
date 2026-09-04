@@ -23,6 +23,25 @@ if (typeof document !== 'undefined') {
     }
   }
 
+  // jsdom has no canvas at all: getContext logs "Not implemented" and returns
+  // null, toBlob throws, createImageBitmap is absent. A silent baseline keeps
+  // any component that merely *renders* a canvas quiet — including effects
+  // that land after a test's own recording mock has been torn down.
+  // `installCanvasMock()` layers a recording context on top when a test wants
+  // to assert what was drawn.
+  HTMLCanvasElement.prototype.getContext = (() => null) as unknown as
+    typeof HTMLCanvasElement.prototype.getContext
+  HTMLCanvasElement.prototype.toBlob = function (callback: BlobCallback, type?: string) {
+    callback(new Blob([], { type: type ?? 'image/png' }))
+  }
+  if (typeof globalThis.createImageBitmap !== 'function') {
+    globalThis.createImageBitmap = (async () => ({
+      width: 1,
+      height: 1,
+      close: () => {},
+    })) as unknown as typeof createImageBitmap
+  }
+
   if (typeof window.matchMedia !== 'function') {
     window.matchMedia = (query: string): MediaQueryList =>
       ({

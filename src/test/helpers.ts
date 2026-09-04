@@ -46,6 +46,85 @@ export function installMatchMediaMock(initialDark = false): { setDark: (dark: bo
   }
 }
 
+export interface CanvasMock {
+  /** The single recording context every getContext('2d') call returns. */
+  ctx: Record<string, ReturnType<typeof vi.fn>> & { measureText: ReturnType<typeof vi.fn> }
+  /** How many times text was stamped — one call per watermark placement. */
+  fillTextCalls: () => { text: string; x: number; y: number }[]
+  restore: () => void
+}
+
+/**
+ * jsdom implements none of the canvas surface: no `getContext`, no `toBlob`,
+ * no `createImageBitmap`. Rather than pull in the native `canvas` package (a
+ * compiled dependency in a repo whose CI is a plain `npm ci`), record the calls
+ * and assert on those — the geometry itself is unit-tested in Node, so what is
+ * left to prove here is that the renderer reaches the canvas at all.
+ */
+export function installCanvasMock(): CanvasMock {
+  const fillText = vi.fn()
+  const ctx = {
+    save: vi.fn(),
+    restore: vi.fn(),
+    translate: vi.fn(),
+    rotate: vi.fn(),
+    scale: vi.fn(),
+    clearRect: vi.fn(),
+    fillRect: vi.fn(),
+    strokeRect: vi.fn(),
+    drawImage: vi.fn(),
+    fillText,
+    // Linear in the font size, like every real implementation.
+    measureText: vi.fn((text: string) => ({
+      width: text.length * 0.55 * fontSizeOf(ctx.font),
+    })),
+    font: '10px sans-serif',
+    fillStyle: '#000000',
+    strokeStyle: '#000000',
+    globalAlpha: 1,
+    lineWidth: 1,
+    textAlign: 'start',
+    textBaseline: 'alphabetic',
+  } as unknown as CanvasMock['ctx'] & { font: string }
+
+  const originalGetContext = HTMLCanvasElement.prototype.getContext
+  const originalToBlob = HTMLCanvasElement.prototype.toBlob
+  const originalCreateImageBitmap = globalThis.createImageBitmap
+
+  HTMLCanvasElement.prototype.getContext = (() => ctx) as unknown as typeof originalGetContext
+  HTMLCanvasElement.prototype.toBlob = function (
+    this: HTMLCanvasElement,
+    callback: BlobCallback,
+    type?: string,
+  ) {
+    callback(new Blob(['stub'], { type: type ?? 'image/png' }))
+  }
+  globalThis.createImageBitmap = (async (source: unknown) => ({
+    width: (source as { width?: number }).width ?? 800,
+    height: (source as { height?: number }).height ?? 600,
+    close: () => {},
+  })) as unknown as typeof createImageBitmap
+
+  return {
+    ctx,
+    fillTextCalls: () =>
+      fillText.mock.calls.map(([text, x, y]) => ({
+        text: text as string,
+        x: x as number,
+        y: y as number,
+      })),
+    restore() {
+      HTMLCanvasElement.prototype.getContext = originalGetContext
+      HTMLCanvasElement.prototype.toBlob = originalToBlob
+      globalThis.createImageBitmap = originalCreateImageBitmap
+    },
+  }
+}
+
+function fontSizeOf(font: string): number {
+  return Number(/(\d+(?:\.\d+)?)px/.exec(font)?.[1] ?? 10)
+}
+
 /**
  * Stub crypto.getRandomValues with a scripted sequence of uint32 values,
  * for deterministic rejection-sampling and shuffle tests.

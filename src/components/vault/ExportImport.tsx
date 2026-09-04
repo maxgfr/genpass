@@ -1,4 +1,5 @@
 import { useRef, useState, type FormEvent } from 'react'
+import { downloadBlob } from '../../lib/download'
 import { VaultDecryptError } from '../../lib/vaultCrypto'
 import { VaultFormatError } from '../../lib/vaultFormat'
 import { useToasts } from '../../state/useToasts'
@@ -37,12 +38,7 @@ export function VaultToolbarExtras() {
   const exportVault = () => {
     const blob = vault.exportBlob()
     if (!blob) return
-    const url = URL.createObjectURL(new Blob([blob], { type: 'application/json' }))
-    const a = document.createElement('a')
-    a.href = url
-    a.download = exportFilename()
-    a.click()
-    URL.revokeObjectURL(url)
+    downloadBlob(new Blob([blob], { type: 'application/json' }), exportFilename())
     toast('Encrypted vault downloaded')
   }
 

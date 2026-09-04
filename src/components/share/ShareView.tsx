@@ -1,6 +1,7 @@
 import { useId, useState, type FormEvent } from 'react'
 import '../../styles/share.css'
 import { copyText } from '../../lib/clipboard'
+import { downloadBlob } from '../../lib/download'
 import { generatePassphrase } from '../../lib/passphrase'
 import { canEncodeQr } from '../../lib/qr'
 import { buildShareUrl, createShareFragment } from '../../lib/share'
@@ -24,15 +25,6 @@ const EXPIRY_PRESETS = [
 ] as const
 
 const DEFAULT_EXPIRY_MS = 86_400_000
-
-function download(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = filename
-  a.click()
-  URL.revokeObjectURL(url)
-}
 
 interface ShareViewProps {
   /** Secret handed over by a share button elsewhere in the app. */
@@ -130,12 +122,12 @@ export function ShareView({ prefill }: ShareViewProps) {
               <Button
                 small
                 onClick={() =>
-                  download(new Blob([qrSvgDocument(text)], { type: 'image/svg+xml' }), 'genpass-qr.svg')
+                  downloadBlob(new Blob([qrSvgDocument(text)], { type: 'image/svg+xml' }), 'genpass-qr.svg')
                 }
               >
                 Download SVG
               </Button>
-              <Button small onClick={() => void qrPngBlob(text).then((b) => download(b, 'genpass-qr.png'))}>
+              <Button small onClick={() => void qrPngBlob(text).then((b) => downloadBlob(b, 'genpass-qr.png'))}>
                 Download PNG
               </Button>
             </div>

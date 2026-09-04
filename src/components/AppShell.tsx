@@ -1,12 +1,13 @@
 import type { ReactNode } from 'react'
 import { GithubIcon, KeyholeIcon } from './ui/icons'
 
-export type AppTab = 'generator' | 'vault' | 'share' | 'settings'
+export type AppTab = 'generator' | 'vault' | 'share' | 'watermark' | 'settings'
 
 const TABS: { id: AppTab; label: string }[] = [
   { id: 'generator', label: 'Generator' },
   { id: 'vault', label: 'Vault' },
   { id: 'share', label: 'Share & QR' },
+  { id: 'watermark', label: 'Watermark' },
   { id: 'settings', label: 'Settings' },
 ]
 

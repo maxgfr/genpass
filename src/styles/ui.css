@@ -298,9 +298,20 @@
   display: flex;
   gap: var(--space-4);
   border-bottom: 1px solid var(--border);
+  /* Five tabs no longer fit a 360px phone. Scroll the strip rather than
+     wrapping it, so the row keeps reading as one row of tabs. */
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-padding-inline: var(--space-4);
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .tabs__tab {
+  flex: 0 0 auto;
+  white-space: nowrap;
   padding: var(--space-2) var(--space-1);
   margin-bottom: -1px;
   border: none;
