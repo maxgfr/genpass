@@ -32,8 +32,9 @@ that works fully offline once loaded (installable as a PWA).
   configurable expiry carried inside the encrypted payload.
 - **QR codes** — for any text, for generated passwords, and for share links; SVG and PNG export.
 - **Watermark** — stamp text across a PDF or an image (PNG, JPEG, WebP, HEIC) without uploading
-  it anywhere. Text, size, opacity, angle, colour, tiled or centred, with a live preview driven by
-  the same code that writes the output. In a PDF the watermark is real vector text on every page,
+  it anywhere. Text, size, opacity, angle, colour, tiled or centred, with a live preview of the
+  real document — page 1 of the PDF, or the photo itself — drawn by the same code that writes the
+  output. In a PDF the watermark is real vector text on every page,
   so the file stays small and the document's own text stays selectable. Several files at once,
   downloaded individually or as a ZIP. A watermark is a visible marking, not protection — it can
   be cropped or edited out, and the app says so rather than implying otherwise.
@@ -61,12 +62,17 @@ that works fully offline once loaded (installable as a PWA).
   password manager while open); clipboard auto-clear is best-effort (browsers block clipboard
   writes from unfocused tabs); `localStorage` is per-origin, so it is namespaced under
   `genpass.*` — and the vault blob within it is encrypted.
-- **Supply chain:** three runtime dependencies beyond React. `qrcode` (MIT) for QR module-matrix
-  encoding; `pdf-lib` (MIT) and `heic-to` (LGPL-3.0) for the Watermark tab only, both loaded by
-  dynamic `import()` so neither is in the initial bundle and neither is reachable from the
-  generator, the vault, or the share flow. Web Crypto for everything cryptographic — still no
-  crypto libraries. ZIP writing and file-type sniffing are ~250 lines in `src/lib/`, not a
-  dependency.
+- **Supply chain:** four runtime dependencies beyond React. `qrcode` (MIT) for QR module-matrix
+  encoding; `pdf-lib` (MIT), `pdfjs-dist` (Apache-2.0) and `heic-to` (LGPL-3.0) for the Watermark
+  tab only, all three loaded by dynamic `import()` so none is in the initial bundle and none is
+  reachable from the generator, the vault, or the share flow. Web Crypto for everything
+  cryptographic — still no crypto libraries. ZIP writing and file-type sniffing are ~250 lines in
+  `src/lib/`, not a dependency.
+- **What each of the three costs, and when.** `pdf-lib` (~435 KB) writes the watermark into a PDF
+  and is precached, so PDF watermarking works offline from the first load. `pdfjs-dist` (~1.7 MB
+  with its worker and the 14 standard fonts) only *draws* a PDF page for the preview;
+  `heic-to` (~3 MB) only decodes HEIC. Those two are fetched on first use and cached, never
+  precached — a user who generates passwords and never opens the tab downloads none of it.
 - **The CSP** (`default-src 'none'`, injected at build time, still **no external hosts**) gained
   exactly one relaxation for the Watermark tab: `worker-src 'self' blob:` (plus `child-src` for
   Safari < 15.5). `heic-to` starts its libheif decoder in a worker built from an inline Blob, and
@@ -74,16 +80,18 @@ that works fully offline once loaded (installable as a PWA).
   imports `heic-to/csp`, the build with no `new Function` — and `'wasm-unsafe-eval'`, which is
   simply unnecessary: `heic-to` ships an asm.js build of libheif, not WebAssembly. `script-src`
   is untouched, and `connect-src 'self'` still means nothing inside that worker can call out.
-  Dropping HEIC support would revert the directive and nothing else.
+  Dropping HEIC support would revert the directive and nothing else. `pdfjs-dist` needed no
+  further relaxation: its worker is a same-origin asset covered by `worker-src 'self'`, and pdf.js
+  v6 no longer evaluates code.
 - **Licensing:** the project is MIT. `heic-to` is LGPL-3.0 (it embeds libheif and libde265). It
   ships as a separate, unmodified, dynamically-imported chunk — the standard arrangement that
   keeps the LGPL's relinking right meaningful for a JavaScript bundle.
 - **Watermark privacy:** the file never leaves the device — there is no upload, and no network
   call is made to produce it. Re-encoding an image strips its EXIF metadata, including GPS
   location; PDFs keep their own metadata, and the app does not add any (it does not stamp itself
-  as the Producer). The ~3 MB HEIC decoder is the one asset not precached, so HEIC needs one
-  online use before it works offline; everything else, PDFs included, works offline from the
-  first load.
+  as the Producer). Two assets are not precached — the HEIC decoder and the pdf.js renderer — so
+  decoding a HEIC and *drawing* a PDF page in the preview each need one online use before they
+  work offline. Watermarking itself, PDFs included, works offline from the first load.
 
 ## Development
 

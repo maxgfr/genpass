@@ -3,7 +3,6 @@ import '../../styles/watermark.css'
 import { isWinAnsiEncodable } from '../../lib/pdfWatermark'
 import { DEFAULT_WATERMARK, type WatermarkConfig } from '../../lib/watermark'
 import { Button } from '../ui/Button'
-import { EmptyState } from '../ui/EmptyState'
 import { InlineWarning } from '../ui/InlineWarning'
 import { FileDropzone } from './FileDropzone'
 import { WatermarkFileRow } from './WatermarkFileRow'
@@ -48,8 +47,55 @@ export function WatermarkView() {
 
   return (
     <>
-      <section className="panel panel--plain">
+      {/* Dropping files and acting on them is one job, so it is one panel: the
+          queue, its Apply button and its downloads sit directly under the drop
+          target rather than below the settings and the preview. */}
+      <section className="panel">
         <FileDropzone onFiles={addFiles} />
+
+        {/* One live region for the whole queue. One per row would turn a batch
+            into unusable screen-reader chatter. */}
+        <p className="wm__status" role="status">
+          {queue.announcement}
+        </p>
+
+        {queue.jobs.length > 0 && (
+          <>
+            <ul className="wm__list" role="radiogroup" aria-label="Document to preview">
+              {queue.jobs.map((job) => (
+                <WatermarkFileRow
+                  key={job.id}
+                  job={job}
+                  selected={previewJob?.id === job.id}
+                  onPreview={setPreviewId}
+                  onFormatChange={queue.setFormat}
+                  onDownload={queue.download}
+                  onRemove={queue.remove}
+                />
+              ))}
+            </ul>
+
+            <div className="wm__actions">
+              <Button
+                variant="primary"
+                busy={queue.running}
+                disabled={queue.pending === 0}
+                onClick={() => void queue.run()}
+              >
+                Apply watermark
+              </Button>
+              {queue.finished > 1 && (
+                <Button onClick={() => void queue.downloadAll()}>Download all (ZIP)</Button>
+              )}
+              <Button onClick={queue.clear}>Clear</Button>
+            </div>
+          </>
+        )}
+      </section>
+
+      <section className="panel">
+        <h2 className="panel__title">Preview</h2>
+        <WatermarkPreview job={previewJob} config={config} />
       </section>
 
       <section className="panel">
@@ -67,80 +113,11 @@ export function WatermarkView() {
           A text watermark is a visible marking, not protection. Anyone can crop or edit it out of
           the file — it discourages casual reuse, it does not prevent it.
         </InlineWarning>
-      </section>
-
-      <section className="panel">
-        <h2 className="panel__title">Preview</h2>
-        <WatermarkPreview job={previewJob} config={config} />
-      </section>
-
-      <section className="panel">
-        <div className="wm__toolbar">
-          <h2 className="panel__title">
-            {queue.jobs.length} {queue.jobs.length === 1 ? 'document' : 'documents'}
-          </h2>
-          <div className="wm__actions">
-            <Button
-              variant="primary"
-              busy={queue.running}
-              disabled={queue.pending === 0}
-              onClick={() => void queue.run()}
-            >
-              Apply watermark
-            </Button>
-            {queue.finished > 1 && (
-              <Button onClick={() => void queue.downloadAll()}>Download all (ZIP)</Button>
-            )}
-            {queue.jobs.length > 0 && <Button onClick={queue.clear}>Clear</Button>}
-          </div>
-        </div>
-
-        {/* One live region for the whole queue. One per row would turn a batch
-            into unusable screen-reader chatter. */}
-        <p className="wm__status" role="status">
-          {queue.announcement}
-        </p>
-
-        {queue.jobs.length === 0 ? (
-          <EmptyState title="No documents yet">
-            <p>
-              Add a PDF or an image above. Everything is processed on your device — no upload, no
-              server.
-            </p>
-          </EmptyState>
-        ) : (
-          <ul className="wm__list">
-            {queue.jobs.map((job) => (
-              <WatermarkFileRow
-                key={job.id}
-                job={job}
-                onFormatChange={queue.setFormat}
-                onDownload={queue.download}
-                onRemove={queue.remove}
-              />
-            ))}
-          </ul>
-        )}
-
-        {usable.length > 1 && previewJob && (
-          <p className="wm__preview-caption">
-            Previewing {previewJob.name}.{' '}
-            <button
-              type="button"
-              className="btn btn--ghost btn--small"
-              onClick={() => {
-                const index = usable.findIndex((job) => job.id === previewJob.id)
-                setPreviewId(usable[(index + 1) % usable.length]!.id)
-              }}
-            >
-              Preview the next document
-            </button>
-          </p>
-        )}
 
         <p className="wm__preview-caption">
           Images are re-encoded, which drops their EXIF metadata — including GPS location. PDFs keep
-          their own metadata. HEIC needs one online use before it works offline.
+          their own metadata. HEIC, and drawing a PDF in the preview, each need one online use
+          before they work offline; watermarking itself never does.
         </p>
       </section>
     </>

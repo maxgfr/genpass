@@ -1,3 +1,4 @@
+import { useId } from 'react'
 import { FORMAT_LABEL, KIND_LABEL, outputOptionsFor, type OutputFormat } from '../../lib/fileKind'
 import { Button, IconButton } from '../ui/Button'
 import { Select } from '../ui/Select'
@@ -19,34 +20,63 @@ function formatSize(bytes: number): string {
 
 interface WatermarkFileRowProps {
   job: WatermarkJob
+  selected: boolean
+  onPreview: (id: string) => void
   onFormatChange: (id: string, format: OutputFormat) => void
   onDownload: (id: string) => void
   onRemove: (id: string) => void
 }
 
-export function WatermarkFileRow({ job, onFormatChange, onDownload, onRemove }: WatermarkFileRowProps) {
+export function WatermarkFileRow({
+  job,
+  selected,
+  onPreview,
+  onFormatChange,
+  onDownload,
+  onRemove,
+}: WatermarkFileRowProps) {
+  const radioId = useId()
   const options = job.kind ? outputOptionsFor(job.kind) : []
 
   return (
     <li
-      className={job.status === 'error' ? 'wm__row wm__row--error' : 'wm__row'}
+      className={
+        [
+          'wm__row',
+          job.status === 'error' && 'wm__row--error',
+          selected && 'wm__row--selected',
+        ]
+          .filter(Boolean)
+          .join(' ')
+      }
       aria-busy={job.status === 'processing' || undefined}
     >
-      <div className="wm__row-main">
-        <p className="wm__row-name">{job.name}</p>
+      {/* A real radio, so arrow keys move between documents and the current
+          one is announced — "one of N is shown" is exactly a radiogroup. */}
+      <input
+        type="radio"
+        id={radioId}
+        className="wm__row-radio"
+        name="wm-preview"
+        checked={selected}
+        disabled={!job.kind}
+        onChange={() => onPreview(job.id)}
+      />
+      <label className="wm__row-main" htmlFor={radioId}>
+        <span className="wm__row-name">{job.name}</span>
         {/* Status as words, not colour: 1.4.1 Use of Colour. */}
-        <p className="wm__row-meta">
+        <span className="wm__row-meta">
           {formatSize(job.size)}
           {job.kind && ` · ${KIND_LABEL[job.kind]}`}
           {' · '}
           {STATUS_LABEL[job.status]}
-        </p>
+        </span>
         {job.error && (
-          <p className="wm__row-error" role="alert">
+          <span className="wm__row-error" role="alert">
             {job.error}
-          </p>
+          </span>
         )}
-      </div>
+      </label>
 
       {options.length > 1 && job.kind && (
         <div className="wm__row-format">

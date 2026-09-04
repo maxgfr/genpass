@@ -19,6 +19,16 @@ vi.mock('../../lib/pdfWatermark', async () => {
   }
 })
 
+// pdf.js needs a real worker and real canvas rendering; neither exists here.
+vi.mock('../../lib/pdfPreview', () => ({
+  renderPdfPage: vi.fn(async () => ({
+    bitmap: { width: 595, height: 842, close: () => {} },
+    width: 595,
+    height: 842,
+  })),
+  PdfPreviewError: class extends Error {},
+}))
+
 vi.mock('../../lib/heic', () => ({
   decodeHeic: vi.fn(async () => ({ width: 400, height: 300, close: () => {} })),
   HeicDecodeError: class extends Error {},
@@ -79,9 +89,27 @@ async function add(user: ReturnType<typeof userEvent.setup>, ...files: File[]) {
 }
 
 describe('WatermarkView — the queue', () => {
-  it('starts empty and says so', () => {
+  it('starts empty, with the drop target explaining what it takes', () => {
     render(<WatermarkView />)
-    expect(screen.getByText(/no documents yet/i)).toBeTruthy()
+    expect(screen.getByRole('button', { name: /choose documents/i })).toBeTruthy()
+    expect(screen.getByText(/PDF, PNG, JPEG, WebP and HEIC/i)).toBeTruthy()
+    // Nothing to act on yet, so no queue actions.
+    expect(screen.queryByRole('button', { name: /apply watermark/i })).toBeNull()
+  })
+
+  it('keeps the drop target and the queue in one place', async () => {
+    const user = setupUser()
+    render(<WatermarkView />)
+    await add(user, pngFile())
+    await screen.findByText('photo.png')
+
+    // The user should not have to scroll past the settings and the preview to
+    // reach the files they just dropped: same panel, drop target first.
+    const panel = screen
+      .getByRole('button', { name: /choose documents/i })
+      .closest('.panel') as HTMLElement
+    expect(within(panel).getByText('photo.png')).toBeTruthy()
+    expect(within(panel).getByRole('button', { name: /apply watermark/i })).toBeTruthy()
   })
 
   it('lists dropped files with their size and status', async () => {
@@ -266,8 +294,38 @@ describe('WatermarkView — options', () => {
     await screen.findByText(/password-protected/i)
 
     await waitFor(() =>
-      expect(screen.getByText(/^Previewing photo\.png\.$/)).toBeTruthy(),
+      expect((screen.getByRole('radio', { name: /photo\.png/ }) as HTMLInputElement).checked).toBe(
+        true,
+      ),
     )
+  })
+
+  it('lets the user pick which document the preview shows', async () => {
+    const user = setupUser()
+    render(<WatermarkView />)
+    await add(user, pngFile(), jpegFile())
+    await screen.findByText('photo.png')
+
+    const first = screen.getByRole('radio', { name: /photo\.png/ }) as HTMLInputElement
+    const second = screen.getByRole('radio', { name: /scan\.jpg/ }) as HTMLInputElement
+    expect(first.checked).toBe(true)
+
+    await user.click(second)
+    await waitFor(() => expect(second.checked).toBe(true))
+    expect(first.checked).toBe(false)
+    expect(
+      screen.getByRole('img').getAttribute('aria-label'),
+      'the preview follows the selection',
+    ).toContain('scan.jpg')
+  })
+
+  it('groups the preview radios so arrow keys move between documents', async () => {
+    const user = setupUser()
+    render(<WatermarkView />)
+    await add(user, pngFile(), jpegFile())
+    await screen.findByText('photo.png')
+
+    expect(screen.getByRole('radiogroup', { name: /document to preview/i })).toBeTruthy()
   })
 
   it('says plainly that a watermark is not protection', () => {
