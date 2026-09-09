@@ -1,6 +1,9 @@
 ---
 name: verify
-description: How to run and drive genpass end-to-end to verify a change (build/launch/drive recipe, known gotchas)
+description: Build, launch, and exercise genpass end to end to verify a change.
+disable-model-invocation: true
+metadata:
+  opencode/autoinvoke: 'false'
 ---
 
 # Verifying genpass end-to-end
