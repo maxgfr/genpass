@@ -113,14 +113,3 @@ first).
 ## License
 
 MIT
-
-## Manual skill invocation
-
-`skills/verify` is a dev-only skill for working on this repo. Codex finds it via
-`.agents/skills`; for another agent, install it locally from the clone with
-`npx skills add .` (pick the agent when prompted, or pass `-a <agent>`, e.g.
-`-a claude-code` or `-a opencode`).
-
-These skills run when explicitly invoked: `verify`. Use `$name` in Codex or `/name` in Claude Code and OpenCode.
-
-The skill bundle disables implicit selection: Claude Code and OpenCode read `disable-model-invocation: true` from `SKILL.md`.
