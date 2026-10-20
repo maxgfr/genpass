@@ -27,3 +27,6 @@ dist-ssr
 .agents/skills/
 .claude/skills/
 skills-lock.json
+
+# Test coverage output
+coverage/
