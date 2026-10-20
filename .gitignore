@@ -23,6 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-# Local install of the dev skill (npx skills add .)
+# Agent skill installs (npx skills add …) — never committed
+.agents/skills/
 .claude/skills/
 skills-lock.json
