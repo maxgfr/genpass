@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local install of the dev skill (npx skills add .)
+.claude/skills/
+skills-lock.json
