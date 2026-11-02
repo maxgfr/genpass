@@ -42,7 +42,7 @@ that works fully offline once loaded (installable as a PWA).
 
 ## Security model
 
-- **What is protected:** the vault at rest. It is stored in `localStorage` only as
+- **What is protected:** the vault at rest. It is stored in IndexedDB (`genpass-vault`) only as
   `{version, kdf, iterations, salt, iv, ciphertext}`; without the master password it is
   computationally unreadable. Every save re-encrypts with a fresh random IV. Integrity is
   guaranteed by GCM: tampered data fails to decrypt.
@@ -60,8 +60,10 @@ that works fully offline once loaded (installable as a PWA).
 - **Honest limits:** JavaScript strings cannot be zeroed from memory; an unlocked vault is
   readable by anyone with access to your unlocked device/session (that is the threat model of any
   password manager while open); clipboard auto-clear is best-effort (browsers block clipboard
-  writes from unfocused tabs); `localStorage` is per-origin, so it is namespaced under
-  `genpass.*` — and the vault blob within it is encrypted.
+  writes from unfocused tabs); browser storage is per-origin and every `maxgfr.github.io` app
+  shares this one, so the preferences sit under `genpass.*` in `localStorage`, the vault in its
+  own IndexedDB database (a full `localStorage` cannot stop it saving), the offline caches under
+  `genpass-*` — and the vault blob is encrypted, since the other sites can read it.
 - **Supply chain:** four runtime dependencies beyond React. `qrcode` (MIT) for QR module-matrix
   encoding; `pdf-lib` (MIT), `pdfjs-dist` (Apache-2.0) and `heic-to` (LGPL-3.0) for the Watermark
   tab only, all three loaded by dynamic `import()` so none is in the initial bundle and none is

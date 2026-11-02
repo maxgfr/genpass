@@ -102,21 +102,22 @@ export default defineConfig({
         // offline — it is only the picture of the page that needs one online
         // use. The worker alone is over the 2 MiB cap anyway.
         globIgnores: ['**/heic-decoder-*.js', '**/pdf-renderer-*.js', '**/pdf.worker*.js', '**/pdf.worker*.mjs'],
+        // Cache Storage is shared by every maxgfr.github.io app: names carry the app's.
         runtimeCaching: [
           {
             urlPattern: /heic-decoder-.*\.js$/,
             handler: 'CacheFirst',
-            options: { cacheName: 'heic-decoder', expiration: { maxEntries: 2 } },
+            options: { cacheName: 'genpass-heic-decoder', expiration: { maxEntries: 2 } },
           },
           {
             urlPattern: /(pdf-renderer-.*\.js|pdf\.worker.*\.m?js)$/,
             handler: 'CacheFirst',
-            options: { cacheName: 'pdf-renderer', expiration: { maxEntries: 4 } },
+            options: { cacheName: 'genpass-pdf-renderer', expiration: { maxEntries: 4 } },
           },
           {
             urlPattern: /\/pdfjs\/standard_fonts\//,
             handler: 'CacheFirst',
-            options: { cacheName: 'pdfjs-fonts', expiration: { maxEntries: 40 } },
+            options: { cacheName: 'genpass-pdfjs-fonts', expiration: { maxEntries: 40 } },
           },
         ],
       },

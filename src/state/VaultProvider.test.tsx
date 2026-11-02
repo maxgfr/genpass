@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 import { act, render, screen, waitFor } from '@testing-library/react'
+import { IDBFactory } from 'fake-indexeddb'
 import { beforeEach, describe, expect, it } from 'vitest'
-import { VAULT_STORAGE_KEY } from '../lib/vaultStorage'
 import { parseVaultFile } from '../lib/vaultFormat'
 import { VaultDecryptError } from '../lib/vaultCrypto'
-import { TEST_ITERATIONS } from '../test/helpers'
+import { TEST_ITERATIONS, storedVault } from '../test/helpers'
 import { VaultProvider, useVault } from './VaultProvider'
 
 let api: ReturnType<typeof useVault>
@@ -40,7 +40,7 @@ describe('VaultProvider', () => {
     await act(() => api.createVault('master-pw'))
     await status('unlocked')
     await act(() => api.addEntry({ label: 'Email', password: 'Sup3rS3cret!' }))
-    const raw = localStorage.getItem(VAULT_STORAGE_KEY)!
+    const raw = (await storedVault())!
     expect(raw).not.toContain('Sup3rS3cret!')
     expect(raw).not.toContain('master-pw')
     expect(raw).not.toContain('Email')
@@ -118,6 +118,7 @@ describe('VaultProvider', () => {
     const blob = api.exportBlob()!
     first.unmount()
     localStorage.clear()
+    globalThis.indexedDB = new IDBFactory()
 
     renderVault()
     await status('uninitialized')
@@ -125,7 +126,7 @@ describe('VaultProvider', () => {
     await status('unlocked')
     expect(api.state.status === 'unlocked' && api.state.entries[0]!.label).toBe('Roundtrip')
     // Imported blob is now the persisted vault.
-    expect(parseVaultFile(localStorage.getItem(VAULT_STORAGE_KEY)!)).toEqual(parseVaultFile(blob))
+    expect(parseVaultFile((await storedVault())!)).toEqual(parseVaultFile(blob))
   })
 
   it('import with a wrong password leaves the existing vault untouched', async () => {

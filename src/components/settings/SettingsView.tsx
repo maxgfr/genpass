@@ -12,28 +12,37 @@ import { PassphraseOptions } from '../generator/PassphraseOptions'
 import { PinOptions } from '../generator/PinOptions'
 
 export function SettingsView() {
-  const { settings, update } = useSettings()
+  const { settings, update, unsaved } = useSettings()
   const vault = useVault()
   const { toast } = useToasts()
   const [erasing, setErasing] = useState(false)
   const [acknowledged, setAcknowledged] = useState(false)
 
   const entryCount = vault.state.status === 'unlocked' ? vault.state.entries.length : null
-  const nothingToErase = vault.state.status === 'uninitialized' && !vault.corrupt
+  const nothingToErase = (vault.state.status === 'uninitialized' || vault.state.status === 'loading') && !vault.corrupt
 
   const closeErase = () => {
     setErasing(false)
     setAcknowledged(false)
   }
 
-  const confirmErase = () => {
-    vault.eraseVault()
+  const confirmErase = async () => {
     closeErase()
-    toast('Vault erased')
+    try {
+      await vault.eraseVault()
+      toast('Vault erased')
+    } catch {
+      toast('Could not erase the vault. Try again.', 'error')
+    }
   }
 
   return (
     <>
+      {unsaved && (
+        <InlineWarning danger>
+          Storage for this site is full or blocked: your settings apply now but will be lost on reload.
+        </InlineWarning>
+      )}
       <section className="panel" aria-label="Appearance">
         <h2 className="panel__title">Appearance</h2>
         <Segmented
@@ -148,7 +157,7 @@ export function SettingsView() {
             className="vault-form"
             onSubmit={(e) => {
               e.preventDefault()
-              confirmErase()
+              void confirmErase()
             }}
           >
             <InlineWarning danger>

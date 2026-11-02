@@ -35,7 +35,7 @@ describe('SaveEntryDialog', () => {
     // First run: the dialog walks through vault creation inline.
     const dialogs = await screen.findAllByText(/create your vault/i)
     expect(dialogs.length).toBeGreaterThan(0)
-    const masterInputs = screen.getAllByLabelText(/^master password$/i)
+    const masterInputs = await screen.findAllByLabelText(/^master password$/i)
     const confirmInputs = screen.getAllByLabelText(/confirm master password/i)
     // Type into the dialog's copy (the last one rendered).
     await user.type(masterInputs.at(-1)!, 'a-long-master-pw')
@@ -56,7 +56,7 @@ describe('SaveEntryDialog', () => {
   it('requires a name before saving', async () => {
     const user = userEvent.setup()
     renderAll('Gen3rated!Pw')
-    const masterInputs = screen.getAllByLabelText(/^master password$/i)
+    const masterInputs = await screen.findAllByLabelText(/^master password$/i)
     await user.type(masterInputs.at(-1)!, 'a-long-master-pw')
     await user.type(screen.getAllByLabelText(/confirm master password/i).at(-1)!, 'a-long-master-pw')
     await user.click(screen.getAllByRole('checkbox').at(-1)!)

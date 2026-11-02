@@ -1,25 +1,32 @@
-import { createContext, useCallback, useContext, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
 import { loadSettings, saveSettings, type Settings } from '../lib/settings'
 
 interface SettingsApi {
   settings: Settings
   update: (patch: Partial<Omit<Settings, 'version'>>) => void
+  /** True when the last change could not be stored: it will be lost on reload. */
+  unsaved: boolean
 }
 
 const SettingsContext = createContext<SettingsApi | null>(null)
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<Settings>(() => loadSettings())
+  const [unsaved, setUnsaved] = useState(false)
+
+  const loaded = useRef(settings)
 
   const update = useCallback((patch: Partial<Omit<Settings, 'version'>>) => {
-    setSettings((prev) => {
-      const next = { ...prev, ...patch }
-      saveSettings(next)
-      return next
-    })
+    setSettings((prev) => ({ ...prev, ...patch }))
   }, [])
 
-  return <SettingsContext.Provider value={{ settings, update }}>{children}</SettingsContext.Provider>
+  // Persist every change (not the settings just loaded), and remember if it could not be kept.
+  useEffect(() => {
+    if (settings === loaded.current) return
+    setUnsaved(!saveSettings(settings))
+  }, [settings])
+
+  return <SettingsContext.Provider value={{ settings, update, unsaved }}>{children}</SettingsContext.Provider>
 }
 
 export function useSettings(): SettingsApi {

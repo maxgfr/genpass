@@ -146,3 +146,9 @@ export function stubRandomSequence(values: number[]): () => void {
     })
   return () => spy.mockRestore()
 }
+
+/** The vault blob as stored by the app (IndexedDB, or localStorage in the fallback). */
+export async function storedVault(): Promise<string | null> {
+  const { loadVaultRaw } = await import('../lib/vaultStorage')
+  return loadVaultRaw()
+}
