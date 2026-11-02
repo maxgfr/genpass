@@ -1,10 +1,16 @@
-import { afterEach } from 'vitest'
+import { afterEach, beforeEach } from 'vitest'
 
 // Runs for every test file. DOM-specific setup only applies in jsdom files
 // (which declare `// @vitest-environment jsdom`); lib tests run in node.
 if (typeof document !== 'undefined') {
   const { cleanup } = await import('@testing-library/react')
   afterEach(cleanup)
+
+  // jsdom has no IndexedDB, where the vault is stored. A fresh one per test.
+  const { IDBFactory } = await import('fake-indexeddb')
+  beforeEach(() => {
+    globalThis.indexedDB = new IDBFactory()
+  })
 
   // jsdom ships getRandomValues but not SubtleCrypto — use Node's real webcrypto.
   if (!globalThis.crypto?.subtle) {

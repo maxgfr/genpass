@@ -1,15 +1,14 @@
 // @vitest-environment jsdom
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { SETTINGS_STORAGE_KEY } from '../../lib/settings'
 import { sealVault } from '../../lib/vaultCrypto'
-import { serializeVault } from '../../lib/vaultFormat'
-import { VAULT_STORAGE_KEY } from '../../lib/vaultStorage'
+import { saveVaultFile } from '../../lib/vaultStorage'
 import { SettingsProvider } from '../../state/SettingsProvider'
 import { ToastProvider } from '../../state/useToasts'
 import { VaultProvider } from '../../state/VaultProvider'
-import { TEST_ITERATIONS } from '../../test/helpers'
+import { TEST_ITERATIONS, storedVault } from '../../test/helpers'
 import { GeneratorView } from '../generator/GeneratorView'
 import { SettingsView } from './SettingsView'
 
@@ -28,6 +27,22 @@ function renderSettings() {
 }
 
 describe('SettingsView', () => {
+  it('says so when a change could not be stored (shared quota full)', async () => {
+    const user = userEvent.setup()
+    renderSettings()
+    const setItem = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new DOMException('quota', 'QuotaExceededError')
+    })
+    try {
+      await user.click(screen.getByRole('radio', { name: /dark/i }))
+      expect(await screen.findByText(/will be lost on reload/i)).toBeTruthy()
+    } finally {
+      setItem.mockRestore()
+    }
+    await user.click(screen.getByRole('radio', { name: /light/i }))
+    expect(screen.queryByText(/will be lost on reload/i)).toBeNull()
+  })
+
   it('persists the theme choice', async () => {
     const user = userEvent.setup()
     renderSettings()
@@ -100,17 +115,17 @@ describe('SettingsView', () => {
   it('erase vault is disabled when no vault exists', async () => {
     renderSettings()
     const trigger = (await screen.findByRole('button', { name: 'Erase vault…' })) as HTMLButtonElement
-    expect(trigger.disabled).toBe(true)
+    await waitFor(() => expect(trigger.disabled).toBe(true))
   })
 
   it('erases the stored vault after explicit acknowledgment', async () => {
     const user = userEvent.setup()
     const file = await sealVault({ entries: [] }, 'a-master-pw', TEST_ITERATIONS)
-    localStorage.setItem(VAULT_STORAGE_KEY, serializeVault(file))
+    await saveVaultFile(file)
     renderSettings()
 
     const trigger = (await screen.findByRole('button', { name: 'Erase vault…' })) as HTMLButtonElement
-    expect(trigger.disabled).toBe(false)
+    await waitFor(() => expect(trigger.disabled).toBe(false))
     await user.click(trigger)
 
     const dialog = within(screen.getByRole('dialog'))
@@ -119,7 +134,7 @@ describe('SettingsView', () => {
     await user.click(dialog.getByRole('checkbox'))
     await user.click(confirm)
 
-    expect(localStorage.getItem(VAULT_STORAGE_KEY)).toBeNull()
     expect(await screen.findByText(/vault erased/i)).toBeTruthy()
+    expect(await storedVault()).toBeNull()
   })
 })

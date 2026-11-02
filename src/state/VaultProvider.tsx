@@ -49,7 +49,7 @@ export interface VaultApi {
   importReplace: (json: string, password: string) => Promise<void>
   /** Destructive reset: deletes the stored vault and every entry in it.
    *  The only way out of a forgotten master password or a corrupt blob. */
-  eraseVault: () => void
+  eraseVault: () => Promise<void>
 }
 
 const VaultContext = createContext<VaultApi | null>(null)
@@ -69,12 +69,19 @@ export function VaultProvider({ children, iterations = DEFAULT_ITERATIONS }: Vau
   const saveChain = useRef<Promise<unknown>>(Promise.resolve())
 
   useEffect(() => {
-    try {
-      dispatch({ type: 'INITIALIZED', file: loadVaultFile() })
-    } catch {
-      // Corrupted blob: refuse to treat as uninitialized — a save would
-      // overwrite possibly recoverable data.
-      setCorrupt(true)
+    let live = true
+    loadVaultFile().then(
+      (file) => {
+        if (live) dispatch({ type: 'INITIALIZED', file })
+      },
+      () => {
+        // Corrupted blob: refuse to treat as uninitialized — a save would
+        // overwrite possibly recoverable data.
+        if (live) setCorrupt(true)
+      },
+    )
+    return () => {
+      live = false
     }
   }, [])
 
@@ -82,7 +89,7 @@ export function VaultProvider({ children, iterations = DEFAULT_ITERATIONS }: Vau
     (key: CryptoKey, base: Pick<EncryptedVaultFile, 'salt' | 'iterations'>, entries: VaultEntry[]) => {
       const task = saveChain.current.then(async () => {
         const file = await sealWithKey(key, base, { entries })
-        saveVaultFile(file)
+        await saveVaultFile(file)
         return file
       })
       saveChain.current = task.catch(() => {})
@@ -96,7 +103,7 @@ export function VaultProvider({ children, iterations = DEFAULT_ITERATIONS }: Vau
       const salt = generateSalt()
       const key = await deriveKey(masterPassword, salt, iterations)
       const file = await sealWithKey(key, { salt: toBase64(salt), iterations }, { entries: [] })
-      saveVaultFile(file)
+      await saveVaultFile(file)
       keyRef.current = key
       dispatch({ type: 'CREATED', file })
     },
@@ -156,7 +163,7 @@ export function VaultProvider({ children, iterations = DEFAULT_ITERATIONS }: Vau
       const salt = generateSalt()
       const key = await deriveKey(next, salt, iterations)
       const file = await sealWithKey(key, { salt: toBase64(salt), iterations }, { entries: state.entries })
-      saveVaultFile(file)
+      await saveVaultFile(file)
       keyRef.current = key
       dispatch({ type: 'SAVED', file, entries: state.entries })
     },
@@ -171,13 +178,13 @@ export function VaultProvider({ children, iterations = DEFAULT_ITERATIONS }: Vau
   const importReplace = useCallback(async (json: string, password: string) => {
     const file = parseVaultFile(json)
     const { key, payload } = await openVault(file, password)
-    saveVaultFile(file)
+    await saveVaultFile(file)
     keyRef.current = key
     dispatch({ type: 'REPLACED', file, entries: payload.entries })
   }, [])
 
-  const eraseVault = useCallback(() => {
-    clearVault()
+  const eraseVault = useCallback(async () => {
+    await clearVault()
     keyRef.current = null
     setCorrupt(false)
     dispatch({ type: 'ERASED' })

@@ -132,19 +132,22 @@ function defaultStorage(): Storage {
 }
 
 export function loadSettings(storage: Storage = defaultStorage()): Settings {
-  const raw = storage.getItem(SETTINGS_STORAGE_KEY)
-  if (raw === null) return DEFAULT_SETTINGS
   try {
+    const raw = storage.getItem(SETTINGS_STORAGE_KEY)
+    if (raw === null) return DEFAULT_SETTINGS
     return mergeSettings(JSON.parse(raw))
   } catch {
     return DEFAULT_SETTINGS
   }
 }
 
-export function saveSettings(settings: Settings, storage: Storage = defaultStorage()): void {
+/** False when the settings could not be stored (the in-memory value still applies). */
+export function saveSettings(settings: Settings, storage: Storage = defaultStorage()): boolean {
   try {
     storage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings))
+    return true
   } catch {
-    // Settings persistence is best-effort; the in-memory value still applies.
+    // Storage full (it is shared by every maxgfr.github.io app) or blocked.
+    return false
   }
 }

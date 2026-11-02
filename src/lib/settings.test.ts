@@ -86,4 +86,13 @@ describe('settings', () => {
     expect(loaded.generator.length).toBe(24)
     expect(loaded.pin).toEqual(DEFAULT_SETTINGS.pin)
   })
+
+  it('reports a write that could not be stored (shared quota full)', () => {
+    const storage = memoryStorage()
+    storage.setItem = () => {
+      throw new DOMException('quota', 'QuotaExceededError')
+    }
+    expect(saveSettings(DEFAULT_SETTINGS, storage)).toBe(false)
+    expect(saveSettings(DEFAULT_SETTINGS, memoryStorage())).toBe(true)
+  })
 })
